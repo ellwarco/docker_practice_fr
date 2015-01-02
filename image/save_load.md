@@ -1,7 +1,7 @@
-## 存出和载入镜像
+## Sauvegarder et charger l'image
 
-### 存出镜像
-如果要导出镜像到本地文件，可以使用 `docker save` 命令。
+### Gardez le miroir
+Si vous voulez exporter l'image pour un fichier local, vous pouvez utiliser le `docker save` commande.
 ```
 $ sudo docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
@@ -10,13 +10,14 @@ ubuntu              14.04               c4ff7513909d        5 weeks ago         
 $sudo docker save -o ubuntu_14.04.tar ubuntu:14.04
 ```
 
-### 载入镜像
-可以使用 `docker load` 从导出的本地文件中再导入到本地镜像库，例如
+### Chargement de l'image
+
+Vous pouvez utiliser la `docker load` à partir de fichiers locaux, puis exporté dans la bibliothèque locale de l'image, par exemple,
 ```
 $ sudo docker load --input ubuntu_14.04.tar
 ```
-或
+Ou
 ```
 $ sudo docker load < ubuntu_14.04.tar
 ```
-这将导入镜像以及其相关的元数据信息（包括标签等）。
+Cela importera l'image et ses informations de métadonnées associées (y compris les étiquettes, etc.).
