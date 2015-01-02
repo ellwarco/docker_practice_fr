@@ -1,22 +1,43 @@
-## 名字空间
-名字空间是 Linux 内核一个强大的特性。每个容器都有自己单独的名字空间，运行在其中的应用都像是在独立的操作系统中运行一样。名字空间保证了容器之间彼此互不影响。
+## Espace de noms
 
-### pid 名字空间
-不同用户的进程就是通过 pid 名字空间隔离开的，且不同名字空间中可以有相同 pid。所有的 LXC 进程在 Docker 中的父进程为Docker进程，每个 LXC 进程具有不同的名字空间。同时由于允许嵌套，因此可以很方便的实现嵌套的 Docker 容器。
+Un espace de noms est une fonctionnalité puissante du noyau Linux. Chaque conteneur possède son propre espace de noms distinct,
+courir tout aimez courir les mêmes applications dans lequel un système d'exploitation distinct. Espace de noms garanti indépendamment
+l'un de l'autre à l'autre entre le récipient.
 
-### net 名字空间
-有了 pid 名字空间, 每个名字空间中的 pid 能够相互隔离，但是网络端口还是共享 host 的端口。网络隔离是通过 net 名字空间实现的， 每个 net 名字空间有独立的 网络设备, IP 地址, 路由表, /proc/net 目录。这样每个容器的网络就能隔离开来。Docker 默认采用 veth 的方式，将容器中的虚拟网卡同 host 上的一 个Docker 网桥 docker0 连接在一起。
+### pid espace de noms
 
-### ipc 名字空间
-容器中进程交互还是采用了 Linux 常见的进程间交互方法(interprocess communication - IPC), 包括信号量、消息队列和共享内存等。然而同 VM 不同的是，容器的进程间交互实际上还是 host 上具有相同 pid 名字空间中的进程间交互，因此需要在 IPC 资源申请时加入名字空间信息，每个 IPC 资源有一个唯一的 32 位 id。
+Différents utilisateurs est à travers le processus d'isoler pid espace de noms et espaces de noms différents peuvent avoir le même pid.
+LXC tous les processus dans le processus parent pour les processus Docker Docker, chacun avec un espace de processus LXC de nom différent.
+Dans le même temps en permettant imbriquée, de sorte que vous pouvez facilement atteindre Docker conteneurs imbriqués.
 
-### mnt 名字空间
-类似 chroot，将一个进程放到一个特定的目录执行。mnt 名字空间允许不同名字空间的进程看到的文件结构不同，这样每个名字空间 中的进程所看到的文件目录就被隔离开了。同 chroot 不同，每个名字空间中的容器在 /proc/mounts 的信息只包含所在名字空间的 mount point。
+### namespace net
 
-### uts 名字空间
-UTS("UNIX Time-sharing System") 名字空间允许每个容器拥有独立的 hostname 和 domain name, 使其在网络上可以被视作一个独立的节点而非 主机上的一个进程。
+Avec espace de noms pid, chaque espace de nom peut être isolé de l'autre pid, mais le port de réseau ou port hôte partagé.
+l'isolement du réseau est assurée par l'espace de nom de réseau, chaque espace de nom de réseau avec des dispositifs séparés de réseau,
+les adresses IP, les tables de routage, répertoire / proc / net. Ces réseaux de chaque conteneur peuvent isoler.
+défaut de Docker façon veth, du conteneur, avec le pont d'hôte d'un NIC virtuel sur Docker.
 
-### user 名字空间
-每个容器可以有不同的用户和组 id, 也就是说可以在容器内用容器内部的用户执行程序而非主机上的用户。
+### IPC espace de noms
 
-*注：关于 Linux 上的名字空间，[这篇文章](http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/) 介绍的很好。
+Container, ou l'utilisation du processus interactif entre Linux processus commun méthodes d'interaction (communication inter - IPC),
+y compris les sémaphores, les files de messages et la mémoire partagée. Cependant, avec la VM est différent, en fait, l'interaction entre les mêmes ou
+ont l'espace de noms pid sur le processus d'interaction entre le conteneur de processus hôte, donc besoin d'ajouter des informations d'espace de noms
+pour postuler ressources IPC, chaque ressource IPC a un unique de 32 id.
+
+### mnt espace de noms
+
+De même chroot, l'exécution d'un processus dans un répertoire spécifique. mnt différents espaces de noms permettent le processus pour voir
+la structure de fichier d'espace de noms différents, de sorte que le répertoire du fichier du processus dans chaque scie espace de noms a été isolé ouvert.
+Chroot différent avec chaque conteneur d'espace de noms dans / proc / monte informations ne contient que le nom de l'espace où le point de montage.
+
+### namespace uts
+
+UTS ("UNIX Time-Sharing système») espace de noms permet à chaque navire a un nom d'hôte et nom de domaine séparé, afin que le réseau peut être considéré
+comme un processus sur un nœud distinct plutôt que l'hôte.
+
+### espace de noms d'utilisateur
+
+Chaque conteneur peut avoir utilisateur et le groupe id différent, ce qui signifie que les utilisateurs sur le programme plutôt que l'hôte peuvent effectuer
+conteneur utilisateur à l'intérieur du conteneur.
+
+*Remarque: Pour l'espace de nom sur Linux, [cet article](http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/) décrit bien.
