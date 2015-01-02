@@ -1,22 +1,27 @@
-## 配置 docker0 网桥
-Docker 服务默认会创建一个 `docker0` 网桥（其上有一个 `docker0` 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。
+## Configuration de pont Docker0
 
-Docker 默认指定了 `docker0` 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。
-* `--bip=CIDR` -- IP 地址加掩码格式，例如 192.168.1.5/24
-* `--mtu=BYTES` -- 覆盖默认的 Docker mtu 配置
+Service Docker par défaut crée un `docker0` pont (sur lequel il ya une `docker0` d'interface interne), il est dans la couche du noyau connectivité
+à autre carte physique ou virtuel, qui sera l'hôte local et tous les conteneurs sont placés sur le même réseau physique.
 
-也可以在配置文件中配置 DOCKER_OPTS，然后重启服务。
-由于目前 Docker 网桥是 Linux 网桥，用户可以使用 `brctl show` 来查看网桥和端口连接信息。
+Docker défaut spécifié `docker0` adresse IP et sous-réseau Interface masque, de sorte que vous pouvez communiquer avec l'autre à travers le pont,
+il donne le MTU (interface de l'unité de transmission maximale permet la réception) entre l'hôte et le conteneur est généralement 1500 octets,
+ou de l'hôte le réseau hôte de routage valeurs par défaut de soutien. Ces valeurs peuvent être configurés dans le service démarre.
+
+* `--bip=CIDR` - adresse IP ainsi que le masque formats, comme 192.168.1.5/24
+* `--mtu=BYTES` - pour remplacer la configuration par défaut Docker MTU
+
+DOCKER_OPTS peut également être configuré dans le fichier de configuration, puis redémarrez le service.
+En raison de l'actuel pont est le pont Docker Linux, les utilisateurs peuvent utiliser `brctl show` pour afficher les informations de connexion pont et le port.
 ```
 $ sudo brctl show
 bridge name     bridge id               STP enabled     interfaces
 docker0         8000.3a1d7362b4ee       no              veth65f9
                                              vethdda6
 ```
-*注：`brctl` 命令在 Debian、Ubuntu 中可以使用 `sudo apt-get install bridge-utils` 来安装。
+* Note: `brctl` commande dans Debian, Ubuntu peut utiliser `sudo apt-get install bridge-utils` installer.
 
-
-每次创建一个新容器的时候，Docker 从可用的地址段中选择一个空闲的 IP 地址分配给容器的 eth0 端口。使用本地主机上 `docker0` 接口的 IP 作为所有容器的默认网关。
+Chaque fois que vous créez un nouveau conteneur lorsque, Docker choisir parmi les adresses disponibles dans une adresse IP libre affecté à port à conteneurs eth0.
+Utilisez le hôte local `docker0` interface IP que la passerelle par défaut pour tous les conteneurs.
 ```
 $ sudo docker run -i -t --rm base /bin/bash
 $ ip addr show eth0
