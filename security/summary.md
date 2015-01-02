@@ -1,4 +1,5 @@
-## 总结
-总体来看，Docker 容器还是十分安全的，特别是在容器内不使用 root 权限来运行进程的话。
+## Pour résumer
+Dans l'ensemble, contenant Docker est encore très sûr, surtout pas avec les privilèges root pour lancer le processus dans un récipient, puis.
 
-另外，用户可以使用现有工具，比如 Apparmor, SELinux, GRSEC 来增强安全性；甚至自己在内核中实现更复杂的安全机制。
+En outre, les utilisateurs peuvent utiliser les outils existants, tels Apparmor, SELinux, grsec pour améliorer la sécurité;
+et même propres mécanismes plus complexes de sécurité leurs dans le noyau.
