@@ -1,0 +1,7 @@
+gitbook:
+  image: humboldtux/gitbook
+  command: serve --output=./builds/_book
+  ports:
+    - "4000:4000"
+  volumes:
+    - .:/repository
