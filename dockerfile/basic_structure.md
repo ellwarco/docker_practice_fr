@@ -1,9 +1,11 @@
-## 基本结构
-Dockerfile 由一行行命令语句组成，并且支持以 `#` 开头的注释行。
+## La structure de base
 
-一般的，Dockerfile 分为四部分：基础镜像信息、维护者信息、镜像操作指令和容器启动时执行指令。
+Dockerfile déclarations de la ligne de commande en ligne, et le soutien à `#` début de la ligne de commentaire.
 
-例如
+En général, Dockerfile divisé en quatre parties: les informations d'image de base lorsque les informations de mainteneur,
+mode d'emploi et un récipient pour commencer miroir exécuter des instructions.
+
+Comme
 ```
 # This dockerfile uses the ubuntu image
 # VERSION 2 - EDITION 1
@@ -24,14 +26,14 @@ RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 # Commands when creating a new container
 CMD /usr/sbin/nginx
 ```
+Parmi eux, un départ doit préciser le nom est basé sur le miroir, puis les informations des instructions du responsable recommandé.
 
-其中，一开始必须指明所基于的镜像名称，接下来推荐说明维护者信息。
+Le dos est en miroir instructions exploitation, tels que `RUN` commande, `RUN` commande d'exécuter des commandes de suivi miroir.
+Chaque exécuter un `RUN` commande, ajouter un nouveau miroir de la couche et soumettre.
 
-后面则是镜像操作指令，例如 `RUN` 指令，`RUN` 指令将对镜像执行跟随的命令。每运行一条 `RUN` 指令，镜像添加新的一层，并提交。
+Enfin, le `CMD` commande pour spécifier la commande à exécuter lorsque le conteneur.
 
-最后是 `CMD` 指令，来指定运行容器时的操作命令。
-
-下面是一个更复杂的例子
+Voici un exemple plus complexe
 ```
 # Nginx
 #
