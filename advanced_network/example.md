@@ -1,8 +1,14 @@
-## 工具和示例
-在介绍自定义网络拓扑之前，你可能会对一些外部工具和例子感兴趣：
+## Outils et exemples
+
+Dans la présentation avant de personnaliser la topologie du réseau, vous pourriez être intéressé par certains des outils externes et des exemples:
 
 ### pipework
-Jérôme Petazzoni 编写了一个叫 [pipework](https://github.com/jpetazzo/pipework) 的 shell 脚本，可以帮助用户在比较复杂的场景中完成容器的连接。
+
+Jérôme Petazzoni écrit un script shell [pipework](https://github.com/jpetazzo/pipework) qui peut aider les utilisateurs
+à compléter la connexion du récipient dans une scène plus complexe.
 
 ### playground
-Brandon Rhodes 创建了一个提供完整的 Docker 容器网络拓扑管理的 [Python库](https://github.com/brandon-rhodes/fopnp/tree/m/playground)，包括路由、NAT 防火墙；以及一些提供 HTTP, SMTP, POP, IMAP, Telnet, SSH, FTP 的服务器。
+
+Brandon Rhodes créé un récipient pour fournir une gestion complète de la topologie du réseau
+Docker [bibliothèques Python](https://github.com/brandon-rhodes/fopnp/tree/m/playground),
+y compris routage, pare-feu NAT, et certains fournissent HTTP, SMTP, POP, IMAP, Telnet, SSH, serveur FTP.
