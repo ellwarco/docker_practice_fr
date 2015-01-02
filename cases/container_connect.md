@@ -1,5 +1,7 @@
-## 多台物理主机之间的容器互联（暴露容器到真实网络中）
-Docker 默认的桥接网卡是 docker0。它只会在本机桥接所有的容器网卡，举例来说容器的虚拟网卡在主机上看一般叫做 veth***  而 Docker 只是把所有这些网卡桥接在一起，如下：
+## interconnexion de conteneurs entre plusieurs hôtes physiques (conteneur exposé au réseau réel)
+
+Docker carte pont par défaut est docker0. Ce est seulement quand tous le conteneur carte pont natif, par exemple, une carte réseau virtuelle
+dans le vaisseau hôte appelé veth*** point de vue général et Docker vient de mettre toutes ces cartes pontées, comme suit:
 ```
 [root@opnvz ~]# brctl show
 bridge name     bridge id               STP enabled     interfaces
@@ -7,7 +9,7 @@ docker0         8000.56847afe9799       no              veth0889
                                              veth3c7b
                                              veth4061
 ```
-在容器中看到的地址一般是像下面这样的地址：
+Voir l'adresse dans le conteneur est généralement comme l'adresse suivante:
 ```
 root@ac6474aeb31d:~# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default
@@ -23,17 +25,22 @@ root@ac6474aeb31d:~# ip a
     inet6 fe80::487d:68ff:feda:9cf/64 scope link
        valid_lft forever preferred_lft forever
 ```
-这样就可以把这个网络看成是一个私有的网络，通过 nat 连接外网，如果要让外网连接到容器中，就需要做端口映射，即 -p 参数。
+Donc, vous pouvez mettre ce réseau comme un réseau privé qui relie le réseau externe via nat, si vous souhaitez vous connecter au conteneur en dehors du réseau,
+vous devez faire le mappage de port, à savoir l'argument -p.
 
-如果在企业内部应用，或者做多个物理主机的集群，可能需要将多个物理主机的容器组到一个物理网络中来，那么就需要将这个网桥桥接到我们指定的网卡上。
+Si les applications maison ou de faire plus d'un cluster hôte physique, vous pourriez avoir besoin d'un conteneur pour plusieurs groupe hôte physique à
+un réseau physique dans le passé, alors vous devez être comblé au pont sur notre carte désignée.
 
-### 拓扑图
-主机 A 和主机 B 的网卡一都连着物理交换机的同一个 vlan 101,这样网桥一和网桥三就相当于在同一个物理网络中了，而容器一、容器三、容器四也在同一物理网络中了，他们之间可以相互通信，而且可以跟同一 vlan 中的其他物理机器互联。
-![物理拓扑图](../_images/container_connect_topology.png)
+### Topologie
 
-### ubuntu 示例
-下面以 ubuntu 为例创建多个主机的容器联网:
-创建自己的网桥,编辑 /etc/network/interface 文件
+NIC hôtes A et B sont fixés à une même commutateur de réseau local virtuel physique 101, ce pont est équivalent à une et trois ponts sur le même réseau physique,
+tandis qu'un récipient, le récipient trois ou quatre dans le même récipient réseau physique, et ils peuvent communiquer entre eux, mais aussi avec le même VLAN 
+d'autres machines physiques interconnectés. 
+![Topologie physique](../_images/container_connect_topology.png)
+
+### exemple ubuntu
+
+Ici, par exemple pour créer de multiples récipients hôtes ubuntu réseau: Créer votre propre pont, éditer le fichier /etc/network/interface
 ```
 auto br0
 iface br0 inet static
@@ -44,10 +51,9 @@ bridge_ports em1
 bridge_stp off
 dns-nameservers 8.8.8.8 192.168.6.1
 ```
-将 Docker 的默认网桥绑定到这个新建的 br0 上面，这样就将这台机器上容器绑定到 em1 这个网卡所对应的物理网络上了。
+Le pont de défaut Docker est lié à ce nouveau top br0, de sorte qu'il sera sur l'emballage de la machine lié à Em1 cette carte un réseau physique correspondant.
 
-ubuntu 修改 /etc/default/docker 文件，添加最后一行内容
-
+ubuntu modifier le fichier /etc/default/docker, ajouter la dernière ligne
 ```
 # Docker Upstart and SysVinit configuration file
 # Customize location of Docker binary (especially for development testing).
@@ -64,7 +70,8 @@ ubuntu 修改 /etc/default/docker 文件，添加最后一行内容
 DOCKER_OPTS="-b=br0"
 ```
 
-在启动 Docker 的时候 使用 -b 参数 将容器绑定到物理网络上。重启 Docker 服务后，再进入容器可以看到它已经绑定到你的物理网络上了。
+Docker commencer à utiliser le paramètre -b dans le récipient lorsqu'il est lié au réseau physique.
+Après le redémarrage du service Docker, puis dans le récipient vous pouvez le voir, il a été lié au réseau physique de votre.
 
 ```
 root@ubuntudocker:~# docker ps
@@ -75,4 +82,5 @@ bridge name     bridge id               STP enabled     interfaces
 br0             8000.7e6e617c8d53       no              em1
                                             vethe6e5
 ```
-这样就直接把容器暴露到物理网络上了，多台物理主机的容器也可以相互联网了。需要注意的是，这样就需要自己来保证容器的网络安全了。
+Ce conteneur est exposé directement au réseau physique, les conteneurs plusieurs hôtes physiques peuvent aussi éliminer l'Internet.
+Il convient de noter que, si vous avez besoin pour assurer votre propre conteneur de la sécurité réseau.
