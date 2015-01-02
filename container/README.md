@@ -1,6 +1,9 @@
-# Docker 容器
-容器是 Docker 又一核心概念。
+# Récipient Docker
+Récipient Docker est un autre concept de base.
 
-简单的说，容器是独立运行的一个或一组应用，以及它们的运行态环境。对应的，虚拟机可以理解为模拟运行的一整套操作系统（提供了运行态环境和其他系统环境）和跑在上面的应用。
+Autrement dit, le conteneur est une ou un ensemble d'applications géré de manière indépendante,
+et de leur environnement opérationnel de l'Etat.
+Correspondant à la machine virtuelle peut être comprise comme un ensemble de simulation exécute un système
+d'exploitation (à condition que l'état de fonctionnement de l'environnement et d'autres environnements de système) et exécuté dans le haut de l'application.
 
-本章将具体介绍如何来管理一个容器，包括创建、启动和停止等。
+Ce chapitre décrit comment gérer un conteneur spécifique, y compris la création, démarrer et arrêter et ainsi de suite.
