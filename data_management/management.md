@@ -1,20 +1,23 @@
-## 利用数据卷容器来备份、恢复、迁移数据卷
-可以利用数据卷对其中的数据进行进行备份、恢复和迁移。
+## volume de conteneur à l'aide des données à sauvegarder, restaurer, migrer des volumes de données
 
-### 备份
-首先使用 `--volumes-from` 标记来创建一个加载 dbdata 容器卷的容器，并从本地主机挂载当前到容器的 /backup 目录。命令如下：
+Vous pouvez utiliser le volume de données sur lequel la sauvegarde de données, la récupération et la migration.
+
+### Sauvegarde
+
+Première utilisation `--volumes-from` tag pour créer un volume de conteneurs dbdata de chargement des conteneurs,
+et à partir de l'hôte local pour monter le répertoire courant contenant `/backup`. De commande est le suivant:
 ```
 $ sudo docker run --volumes-from dbdata -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /dbdata
 ```
-容器启动后，使用了 `tar` 命令来将 dbdata 卷备份为本地的 `/backup/backup.tar`。
+Après le conteneur a commencé, utilisez le `tar` commande pour dbdata sauvegarde de volume pour locale `/backup/backup.tar`.
 
+### Récupération
 
-### 恢复
-如果要恢复数据到一个容器，首先创建一个带有数据卷的容器 dbdata2。
+Si vous souhaitez restaurer les données à un conteneur, le conteneur dbdata2 d'abord créer un volume de données avec le.
 ```
 $ sudo docker run -v /dbdata --name dbdata2 ubuntu /bin/bash
 ```
-然后创建另一个容器，挂载 dbdata2 的容器，并使用 `untar` 解压备份文件到挂载的容器卷中。
+Ensuite, créez un autre récipient, montez conteneurs dbdata2 et utiliser `untar` extraire fichier de sauvegarde pour monter le volume de conteneurs.
 ```
 $ sudo docker run --volumes-from dbdata2 -v $(pwd):/backup busybox tar xvf
 /backup/backup.tar
