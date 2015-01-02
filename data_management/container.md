@@ -1,23 +1,26 @@
-## 数据卷容器
-如果你有一些持续更新的数据需要在容器之间共享，最好创建数据卷容器。
+## récipient de volume de données
 
-数据卷容器，其实就是一个正常的容器，专门用来提供数据卷供其它容器挂载的。
+Si vous avez un besoin de mettre à jour en permanence les données partagées entre le conteneur, il est préférable de créer un volume de données conteneurs.
 
-首先，创建一个命名的数据卷容器 dbdata：
+récipient de volume de données, en fait, un récipient normale, conçu pour fournir des données pour d'autres récipients monté volumes.
+
+Tout d'abord, créer un conteneur dbdata de volume de données nommée:
 ```
 $ sudo docker run -d -v /dbdata --name dbdata training/postgres echo Data-only container for postgres
 ```
-然后，在其他容器中使用 `--volumes-from` 来挂载 dbdata 容器中的数据卷。
+Ensuite, utilisez les autres récipients `--volumes-from` montage dbdata volumes de données de conteneur.
 ```
 $ sudo docker run -d --volumes-from dbdata --name db1 training/postgres
 $ sudo docker run -d --volumes-from dbdata --name db2 training/postgres
 ```
-还可以使用多个 `--volumes-from` 参数来从多个容器挂载多个数据卷。
-也可以从其他已经挂载了容器卷的容器来挂载数据卷。
+Vous pouvez également utiliser plusieurs `--volumes-from` argument pour monter plusieurs volumes de données à partir de plusieurs conteneurs.
+Vous pouvez également avoir monté un récipient à partir d'autres volumes de conteneurs de monter des volumes de données.
 ```
 $ sudo docker run -d --name db3 --volumes-from db1 training/postgres
 ```
-*注意：使用 `--volumes-from` 参数所挂载数据卷的容器自己并不需要保持在运行状态。
+* Remarque: Utilisez `--volumes-from` conteneur volumes de données de paramètres sont montés lui-même ne ont pas besoin d'être dans l'état de fonctionnement.
 
-如果删除了挂载的容器（包括 dbdata、db1 和 db2），数据卷并不会被自动删除。如果要删除一个数据卷，必须在删除最后一个还挂载着它的容器时使用 `docker rm -v` 命令来指定同时删除关联的容器。
-这可以让用户在容器之间升级和移动数据卷。具体的操作将在下一节中进行讲解。
+Si vous supprimez les conteneurs de montage (y compris dbdata, DB1 et DB2), les volumes de données et ne sont pas supprimés automatiquement.
+Si vous voulez supprimer un volume de données doit également être monté avec une suppression de la dernière de son conteneur en cours d'utilisation
+`docker rm -v` commande pour spécifier le même temps supprimer le conteneur associé. Cela permet aux utilisateurs de mettre à niveau et
+de déplacer des données entre le volume de conteneurs. Des actions spécifiques seront expliquées dans la section suivante.
