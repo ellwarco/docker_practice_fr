@@ -1,7 +1,8 @@
-## Ubuntu 系列安装 Docker
+## Ubuntu série Docker d'installation
 
-### 通过系统自带包安装
-Ubuntu 14.04 版本系统中已经自带了 Docker 包，可以直接安装。
+### Grâce au système livré avec l'installation du paquet
+
+Ubuntu 14.04 système de libération vient déjà avec forfait Docker qui peut être installé directement.
 ```
 $ sudo apt-get update
 $ sudo apt-get install -y docker.io
@@ -9,10 +10,12 @@ $ sudo ln -sf /usr/bin/docker.io /usr/local/bin/docker
 $ sudo sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io
 ```
 
-如果使用操作系统自带包安装 Docker，目前安装的版本是比较旧的 0.9.1。 要安装更新的版本，可以通过使用 Docker 源的方式。
+Si vous utilisez un système d'exploitation qui vient avec l'installation du paquet Docker,
+version actuellement installée est plus 0.9.1. Pour installer la version mise à jour, vous pouvez utiliser les sources Docker à sens unique.
 
-### 通过Docker源安装最新版本
-要安装最新的 Docker 版本，首先需要安装 apt-transport-https 支持，之后通过添加源来安装。
+### Installer la dernière version par source Docker
+
+Pour installer la dernière version du Docker, vous devez d'abord installer le support apt-transport-https, suivi par l'addition à la source d'installation.
 ```
 $ sudo apt-get install apt-transport-https
 $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
@@ -21,16 +24,17 @@ $ sudo apt-get update
 $ sudo apt-get install lxc-docker
 ```
 
-### 14.04 之前版本
-如果是较低版本的 Ubuntu 系统，需要先更新内核。
+### Avant la version 14.04
+
+Si il est une version antérieure du système Ubuntu, vous devez mettre à jour le noyau.
 ```
 $ sudo apt-get update
 $ sudo apt-get install linux-image-generic-lts-raring linux-headers-generic-lts-raring
 $ sudo reboot
 ```
-然后重复上面的步骤即可。
+Ensuite, répétez les étapes ci-dessus.
 
-安装之后启动 Docker 服务。
+Démarrez le service Docker après l'installation.
 ```
 $ sudo service docker start
 ```
