@@ -1,5 +1,5 @@
-# 安全
-评估 Docker 的安全性时，主要考虑三个方面:
-* 由内核的名字空间和控制组机制提供的容器内在安全
-* Docker程序（特别是服务端）本身的抗攻击性
-* 内核安全性的加强机制对容器安全性的影响
+# Sécurité
+Docker sécurité évaluation, les trois principaux secteurs:
+* Récipients fournis par le groupe d'espace de noms et de contrôle noyau mécanismes de sécurité internes
+* Docker programme (en particulier la fin de service) se contre les attaques
+* Mécanismes de sécurité du noyau pour renforcer l'impact de la sécurité des conteneurs
