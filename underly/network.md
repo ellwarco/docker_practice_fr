@@ -1,39 +1,56 @@
-## Docker 网络实现
+## réseaux de Docker
 
-Docker 的网络实现其实就是利用了 Linux 上的网络名字空间和虚拟网络设备（特别是 veth pair）。建议先熟悉了解这两部分的基本概念再阅读本章。
+Les réseaux de docker est l'utilisation du réseau est en fait l'espace de nom et périphériques réseau virtuelle (en particulier la paire veth) Linux sur.
+Recommandons de vous familiariser avec les concepts de base des deux parties de la re-lire ce chapitre.
 
-### 基本原理
-首先，要实现网络通信，机器需要至少一个网络接口（物理接口或虚拟接口）来收发数据包；此外，如果不同子网之间要进行通信，需要路由机制。
+### Fondamental
 
-Docker 中的网络接口默认都是虚拟的接口。虚拟接口的优势之一是转发效率较高。
-Linux 通过在内核中进行数据复制来实现虚拟接口之间的数据转发，发送接口的发送缓存中的数据包被直接复制到接收接口的接收缓存中。对于本地系统和容器内系统看来就像是一个正常的以太网卡，只是它不需要真正同外部网络设备通信，速度要快很多。
+Tout d'abord, la communication réseau, la machine nécessite au moins un (interface physique ou virtuel) interface réseau pour
+envoyer et recevoir des paquets de données; En outre, si vous voulez communiquer entre les différents sous-réseaux nécessite mécanisme de routage.
 
-Docker 容器网络就利用了这项技术。它在本地主机和容器内分别创建一个虚拟接口，并让它们彼此连通（这样的一对接口叫做 `veth pair`）。
+Les interfaces réseau sont Docker interfaces virtuelles par défaut. L'un des avantages des interfaces virtuelles est plus grande efficacité de transfert.
+En effectuant la réplication de données noyau Linux pour obtenir des données d'expéditeur interface virtuelle entre l'interface de mémoire tampon d'émission
+à envoyer les paquets sont copiés directement à l'orifice de réception du tampon de réception. Pour les systèmes locaux et les conteneurs dans le système
+apparaît comme une carte Ethernet normale, mais il n'a pas vraiment communique pas avec l'équipement de réseau externe, beaucoup plus rapide.
 
-### 创建网络参数
-Docker 创建一个容器的时候，会执行如下操作：
-* 创建一对虚拟接口，分别放到本地主机和新容器中；
-* 本地主机一端桥接到默认的 docker0 或指定网桥上，并具有一个唯一的名字，如 veth65f9；
-* 容器一端放到新容器中，并修改名字作为 eth0，这个接口只在容器的名字空间可见；
-* 从网桥可用地址段中获取一个空闲地址分配给容器的 eth0，并配置默认路由到桥接网卡 veth65f9。
+Réseau de récipient Docker sur l'utilisation de cette technologie. Il crée une interface virtuelle, respectivement, à l'intérieur de l'hôte local
+et le conteneur et le laisser à communiquer les uns avec les autres (par exemple une paire d'interface appelée `veth pair`).
 
-完成这些之后，容器就可以使用 eth0 虚拟网卡来连接其他容器和其他网络。
+### Créez votre paramètres de réseau
 
-可以在 `docker run` 的时候通过 `--net` 参数来指定容器的网络配置，有4个可选值：
-* `--net=bridge` 这个是默认值，连接到默认的网桥。
-* `--net=host` 告诉 Docker 不要将容器网络放到隔离的名字空间中，即不要容器化容器内的网络。此时容器使用本地主机的网络，它拥有完全的本地主机接口访问权限。容器进程可以跟主机其它 root 进程一样可以打开低范围的端口，可以访问本地网络服务比如 D-bus，还可以让容器做一些影响整个主机系统的事情，比如重启主机。因此使用这个选项的时候要非常小心。如果进一步的使用 `--privileged=true`，容器会被允许直接配置主机的网络堆栈。
-* `--net=container:NAME_or_ID` 让 Docker 将新建容器的进程放到一个已存在容器的网络栈中，新容器进程有自己的文件系统、进程列表和资源限制，但会和已存在的容器共享 IP 地址和端口等网络资源，两者进程可以直接通过 `lo` 环回接口通信。
-* `--net=none` 让 Docker 将新容器放到隔离的网络栈中，但是不进行网络配置。之后，用户可以自己进行配置。
+Docker créer un conteneur de temps, va faire ce qui suit:
+* Crée une interface virtuelle, respectivement, dans l'hôte local et un nouveau conteneur;
+* Fin du pont à l'hôte local sur le docker0 par défaut ou pont désigné, et a un nom unique, comme veth65f9;
+* Une extrémité du récipient dans le nouveau conteneur, et de changer le nom comme eth0, cette interface ne est visible que dans l'espace de nom du conteneur;
+* Obtenu à partir du pont d'adresses disponibles dans un eth0 adresse libre du conteneur, attribué, et configurer la route vers l'veth65f9 de carte de pont de défaut.
 
-### 网络配置细节
-用户使用 `--net=none` 后，可以自行配置网络，让容器达到跟平常一样具有访问网络的权限。通过这个过程，可以了解 Docker 配置网络的细节。
+Après ceux-ci, le conteneur peut être utilisé pour connecter d'autres conteneurs de la carte réseau virtuelle, et d'autres réseaux.
 
-首先，启动一个 `/bin/bash` 容器，指定 `--net=none` 参数。
+Vous pouvez `docker run` moment par `--net` paramètre pour spécifier la configuration du réseau de conteneurs, il ya quatre valeurs possibles:
+* `--net=bridge` ce est le défaut, de se connecter à la passerelle par défaut.
+* `--net=host` dit Docker Ne mettez pas l'isolement de l'espace de noms de réseau de conteneurs, ce est à dire pas dans le réseau de porte-conteneurs.
+À ce stade, le récipient en utilisant le réseau d'un hôte local, il a un accès complet à l'interface de l'hôte local.
+Récipient avec une foule d'autres processus racine peut traiter bas que vous pouvez ouvrir une plage de ports, vous pouvez accéder
+aux services de réseau local, tels que D-bus, vous pouvez aussi faire quelque chose pour le conteneur affecte le système hôte entier,
+comme le redémarrage de l'hôte. Il faut donc utiliser cette option si vous voulez être très prudent. Si une utilisation ultérieure `--privileged=true`,
+le conteneur sera autorisé à configurer directement la pile réseau hôte.
+* `--net=container:NAME_or_ID` Docker permettra le nouveau conteneur dans une pile réseau de conteneur de processus existant,
+le nouveau processus de conteneur a son système de fichiers propre, liste de processus et de ressources,
+mais le conteneur existant et les adresses IP partagées et des ports et d'autres ressources du réseau, les deux processus peuvent être directement par
+`lo` communication de l'interface de bouclage.
+* `--net=none laissez Docker` nouveau conteneur dans une pile de réseau isolé, mais pas de la configuration du réseau.
+Après cela, l'utilisateur peut configurer vous-même.
+
+### les détails de configuration de réseau
+Utilisateur `--net=none`, vous pouvez configurer le réseau lui-même, le navire atteint les privilèges habituels ont accès au réseau.
+Grâce à ce processus, vous pouvez comprendre les détails de la configuration du réseau Docker.
+
+Tout d'abord, commencer un `/bin/bash` récipient, désigné `--net=none` paramètre.
 ```
 $ sudo docker run -i -t --rm --net=none base /bin/bash
 root@63f36fc01b5f:/#
 ```
-在本地主机查找容器的进程 id，并为它创建网络命名空间。
+Trouver un conteneur dans le numéro de processus de l'hôte local, et de créer un espace de noms réseau pour elle.
 ```
 $ sudo docker inspect -f '{{.State.Pid}}' 63f36fc01b5f
 2778
@@ -41,20 +58,21 @@ $ pid=2778
 $ sudo mkdir -p /var/run/netns
 $ sudo ln -s /proc/$pid/ns/net /var/run/netns/$pid
 ```
-检查桥接网卡的 IP 和子网掩码信息。
+Vérifiez l'adresse IP et le masque de sous-réseau carte pont informations.
 ```
 $ ip addr show docker0
 21: docker0: ...
 inet 172.17.42.1/16 scope global docker0
 ...
 ```
-创建一对 “veth pair” 接口 A 和 B，绑定 A 到网桥 `docker0`，并启用它
+Création d'une paire d'interfaces "paire" VETH A et B, A est lié à combler `docker0`, et lui permettre de
 ```
 $ sudo ip link add A type veth peer name B
 $ sudo brctl addif docker0 A
 $ sudo ip link set A up
 ```
-将B放到容器的网络命名空间，命名为 eth0，启动它并配置一个可用 IP（桥接网段）和默认网关。
+Le B dans l'espace de noms nommé eth0 réseau de conteneurs, démarrer et configurer un IP disponibles (du segment de réseau ponté),
+et la passerelle par défaut.
 ```
 $ sudo ip link set B netns $pid
 $ sudo ip netns exec $pid ip link set dev B name eth0
@@ -62,8 +80,9 @@ $ sudo ip netns exec $pid ip link set eth0 up
 $ sudo ip netns exec $pid ip addr add 172.17.42.99/16 dev eth0
 $ sudo ip netns exec $pid ip route add default via 172.17.42.1
 ```
-以上，就是 Docker 配置网络的具体过程。
+Ci-dessus, le processus de configuration de réseau spécifique Docker.
 
-当容器结束后，Docker 会清空容器，容器内的 eth0 会随网络命名空间一起被清除，A 接口也被自动从 `docker0` 卸载。
+Après la fin du conteneur, Docker videra, container eth0 sera effacée avec l'espace de noms réseau ensemble, Une interface sont automatiquement `docker0` déchargés.
 
-此外，用户可以使用 `ip netns exec` 命令来在指定网络名字空间中进行配置，从而配置容器内的网络。
+En outre, les utilisateurs peuvent utiliser les `ip netns exec` commande pour configurer le nom du réseau dans l'espace désigné,
+la configuration ainsi le conteneur de réseau.
