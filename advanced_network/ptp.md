@@ -1,11 +1,12 @@
-## 示例：创建一个点到点连接
-默认情况下，Docker 会将所有容器连接到由 `docker0` 提供的虚拟子网中。
+## Exemple: Création d'une connexion point à point
 
-用户有时候需要两个容器之间可以直连通信，而不用通过主机网桥进行桥接。
+Par défaut, Docker tout sera relié au récipient par `docker0` fournissent sous-réseau virtuel.
 
-解决办法很简单：创建一对 `peer` 接口，分别放到两个容器中，配置成点到点链路类型即可。
+Les utilisateurs ont parfois besoin d'être en mesure de communiquer directement connecté entre les deux récipients, plutôt que comblé par un pont hôte.
 
-首先启动 2 个容器：
+La solution est simple: créer une paire de `peer` interfaces, respectivement placés dans deux conteneurs, peut être configuré pour pointer type de lien.
+
+Premier départ deux conteneurs:
 ```
 $ sudo docker run -i -t --rm --net=none base /bin/bash
 root@1f1f4c1f931a:/#
@@ -13,7 +14,7 @@ $ sudo docker run -i -t --rm --net=none base /bin/bash
 root@12e343489d2f:/#
 ```
 
-找到进程号，然后创建网络名字空间的跟踪文件。
+Trouver l'ID du processus, et puis créer un nom de fichier espace de trace réseau.
 ```
 $ sudo docker inspect -f '{{.State.Pid}}' 1f1f4c1f931a
 2989
@@ -24,7 +25,7 @@ $ sudo ln -s /proc/2989/ns/net /var/run/netns/2989
 $ sudo ln -s /proc/3004/ns/net /var/run/netns/3004
 ```
 
-创建一对 `peer` 接口，然后配置路由
+Création d'une paire de `peer` interface, puis configurer le routage
 ```
 $ sudo ip link add A type veth peer name B
 
@@ -38,8 +39,9 @@ $ sudo ip netns exec 3004 ip addr add 10.1.1.2/32 dev B
 $ sudo ip netns exec 3004 ip link set B up
 $ sudo ip netns exec 3004 ip route add 10.1.1.1/32 dev B
 ```
-现在这 2 个容器就可以相互 ping 通，并成功建立连接。点到点链路不需要子网和子网掩码。
+Or, ces deux conteneurs peuvent cingler l'autre, et avec succès établir une connexion. À point liens et ne ont pas besoin d'un masque de sous-réseau.
 
-此外，也可以不指定 `--net=none` 来创建点到点链路。这样容器还可以通过原先的网络来通信。
+En outre, vous ne pouvez pas spécifier `--net=none` pour créer une liaison point à point. Ces récipients peuvent également communiquer à travers le réseau d'origine.
 
-利用类似的办法，可以创建一个只跟主机通信的容器。但是一般情况下，更推荐使用 `--icc=false` 来关闭容器之间的通信。
+Utilisation de la même façon, vous pouvez créer un conteneur avec seulement les communications hôte. Mais dans des circonstances normales,
+mais recommandé `--icc=false` pour fermer la communication entre les conteneurs.
