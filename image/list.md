@@ -1,5 +1,6 @@
-## 列出本地镜像
-使用 `docker images` 显示本地已有的镜像。
+## Listes miroir local
+
+Utiliser `docker images` afficher le miroir existant locale.
 ```
 $ sudo docker images
 REPOSITORY       TAG      IMAGE ID      CREATED      VIRTUAL SIZE
@@ -11,19 +12,22 @@ ubuntu           trusty   99ec81b80c55  4 weeks ago  266 MB
 ...
 ```
 
-在列出信息中，可以看到几个字段信息
+Dans les informations indiquées, vous pouvez voir plusieurs domaines de l'information
 
-* 来自于哪个仓库，比如 ubuntu
-* 镜像的标记，比如 14.04
-* 它的 `ID` 号（唯一）
-* 创建时间
-* 镜像大小
+* À partir de laquelle l'entrepôt, comme ubuntu
+* Mark miroir, tels 14,04
+* Son ID Numéro (unique)
+* Établi
+* Taille de l'image
 
-其中镜像的 `ID` 唯一标识了镜像，注意到 `ubuntu:14.04` 和 `ubuntu:trusty` 具有相同的镜像 `ID`，说明它们实际上是同一镜像。
+Quel miroir `ID` identifie de manière unique un miroir, notant `ubuntu:14.04` et `ubuntu:trusty` miroir avec le même `ID`, ce qui indique qu'ils sont en fait la même image.
 
-`TAG` 信息用来标记来自同一个仓库的不同镜像。例如 `ubuntu` 仓库中有多个镜像，通过 `TAG` 信息来区分发行版本，例如 `10.04`、`12.04`、`12.10`、`13.04`、`14.04` 等。例如下面的命令指定使用镜像 `ubuntu:14.04` 来启动一个容器。
+`TAG` information est utilisée pour marquer une image différente de la même entrepôt. Par exemple `ubuntu` dépôts ont miroir multiple par `TAG` informations
+de libération de distinguer, par exemple, `10.04`, `12.04` , `12.10` , `13.04`, `14.04` , etc. Par exemple, la commande suivante spécifie l'utilisation 
+d'un miroir `ubuntu:14.04` pour démarrer un conteneur.
+
 ```
 $ sudo docker run -t -i ubuntu:14.04 /bin/bash
 ```
 
-如果不指定具体的标记，则默认使用 `latest` 标记信息。
+Si vous ne spécifiez pas une balise spécifique, la valeur par défaut `latest` information sur le tag.
