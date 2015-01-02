@@ -1,23 +1,28 @@
-## 快速配置指南
+## Guide de configuration rapide
 
-下面是一个跟 Docker 网络相关的命令列表。
+Voici une liste des commandes associées avec le réseau Docker.
 
-其中有些命令选项只有在 Docker 服务启动的时候才能配置，而且不能马上生效。
-* `-b BRIDGE or --bridge=BRIDGE` --指定容器挂载的网桥
-* `--bip=CIDR` --定制 docker0 的掩码
-* `-H SOCKET... or --host=SOCKET...` --Docker 服务端接收命令的通道
-* `--icc=true|false` --是否支持容器之间进行通信
-* `--ip-forward=true|false` --请看下文容器之间的通信
-* `--iptables=true|false` --禁止 Docker 添加 iptables 规则
-* `--mtu=BYTES` --容器网络中的 MTU
+Certaines options de commande que lorsque le service commence à Docker peut configurer, mais ne prend pas effet immédiatement.
 
-下面2个命令选项既可以在启动服务时指定，也可以 Docker 容器启动（`docker run`）时候指定。在 Docker 服务启动的时候指定则会成为默认值，后面执行 `docker run` 时可以覆盖设置的默认值。
-* `--dns=IP_ADDRESS...` --使用指定的DNS服务器
-* `--dns-search=DOMAIN...` --指定DNS搜索域
+* `-b BRIDGE` or `--bridge=BRIDGE` - réservoir fixé pont spécifié
+* `--bip=CIDR` - masque personnalisé docker0
+* `-H SOCKET...` or `--host=SOCKET...` --Docker serveur reçoit un canal de commande
+* `--icc=true|false` - de soutenir ou non la communication entre le récipient
+* `--ip-forward=true|false` - Envisager la communication suivante entre les conteneurs
+* `--iptables=true|false` - ajouter iptables règles interdisent Docker
+* `--mtu=BYTES` - réseau contenant MTU
 
-最后这些选项只有在 `docker run` 执行时使用，因为它是针对容器的特性内容。
-* `-h HOSTNAME or --hostname=HOSTNAME` --配置容器主机名
-* `--link=CONTAINER_NAME:ALIAS` --添加到另一个容器的连接
-* `--net=bridge|none|container:NAME_or_ID|host` --配置容器的桥接模式
-* `-p SPEC or --publish=SPEC` --映射容器端口到宿主主机
-* `-P or --publish-all=true|false` --映射容器所有端口到宿主主机
+Les deux options de commande suivantes peuvent être spécifiées soit lorsque vous démarrez le service, vous pouvez commencer récipient Docker
+( `docker run` ) lorsqu'il est désigné. Service Docker commence à l'heure indiquée sera la valeur par défaut, suivie par la mise en œuvre
+de `docker run` peut remplacer les paramètres par défaut quand.
+
+* `--dns=IP_ADDRESS...` - Utiliser le serveur DNS spécifié
+* `--dns-search=DOMAIN...` - Indique le domaine de recherche DNS
+
+La dernière de ces options ne sont `docker run` l'exécution utilisé parce qu'il est la nature du contenu du conteneur.
+
+* `-h HOSTNAME` or `--hostname=HOSTNAME` - Configuration conteneur du nom de l'hôte
+* `--link=CONTAINER_NAME:ALIAS` - ajouter une connexion à un autre navire
+* `--net=bridge|none|container:NAME_or_ID|host` - mode de configuration de pont pour conteneurs
+* `-p SPEC or --publish=SPEC` - port à conteneurs de cartographie pour accueillir l'hôte
+* `-P or --publish-all=true|false` - la cartographie de tous les ports de conteneurs pour accueillir l'hôte
