@@ -1,8 +1,8 @@
-## 获取镜像
+## Obtenez un miroir
 
-可以使用 `docker pull` 命令来从仓库获取所需要的镜像。
+Vous pouvez utiliser le `docker pull` commande pour obtenir l'image souhaitée de l'entrepôt.
 
-下面的例子将从 Docker Hub 仓库下载一个 Ubuntu 12.04 操作系统的镜像。
+L'exemple suivant de l'entrepôt Docker Hub télécharger une image Ubuntu 12.04 du système d'exploitation.
 ```
 $ sudo docker pull ubuntu:12.04
 Pulling repository ubuntu
@@ -14,12 +14,11 @@ a300658979be: Download complete
 ffdaafd1ca50: Download complete
 d047ae21eeaf: Download complete
 ```
-下载过程中，会输出获取镜像的每一层信息。
+Le processus de téléchargement sera émis pour obtenir des informations sur chaque couche du miroir.
 
-该命令实际上相当于 `$ sudo docker pull registry.hub.docker.com/ubuntu:12.04` 命令，即从注册服务器 `registry.hub.docker.com` 中的 `ubuntu` 仓库来下载标记为 `12.04` 的镜像。
+Cette commande est en fait l'équivalent de `$ sudo docker pull registry.hub.docker.com/ubuntu:12.04` commande, du serveur d'enregistrement `registry.hub.docker.com` d' `ubuntu` pour télécharger marque entrepôt `12.04` miroir.
 
-有时候官方仓库注册服务器下载较慢，可以从其他仓库下载。
-从其它仓库下载时需要指定完整的仓库注册服务器地址。例如
+Parfois, le téléchargement de serveur d'enregistrement dépositaire officiel est lent, vous pouvez télécharger d'autres entrepôts. Vous devez spécifier l'adresse complète de serveur d'enregistrement d'un autre téléchargement de l'entrepôt de stockage. Comme
 ```
 $ sudo docker pull dl.dockerpool.com:5000/ubuntu:12.04
 Pulling dl.dockerpool.com:5000/ubuntu
@@ -32,7 +31,7 @@ ffdaafd1ca50: Download complete
 d047ae21eeaf: Download complete
 ```
 
-完成后，即可随时使用该镜像了，例如创建一个容器，让其中运行 bash 应用。
+À la fin, vous pouvez toujours utiliser le miroir, comme la création d'un conteneur, qui permet aux applications de se exécuter bash.
 ```
 $ sudo docker run -t -i ubuntu:12.04 /bin/bash
 root@fe7fc4bd8fc9:/#
