@@ -1,34 +1,36 @@
-## 安装
+## Installation
 
-etcd 基于 Go 语言实现，因此，用户可以从 [项目主页](https://github.com/coreos/etcd) 下载源代码自行编译，也可以下载编译好的二进制文件，甚至直接使用制作好的 Docker 镜像文件来体验。
+Aller langage basé ETCD, afin que les utilisateurs peuvent à partir de [la page d'accueil](https://github.com/coreos/etcd)
+de projet pour télécharger le code source à compiler, vous pouvez également télécharger les fichiers binaires compilés,
+ou même directement Docker fichier image pour faire une bonne expérience.
 
-### 二进制文件方式下载
+### Téléchargement de fichier binaire
 
-编译好的二进制文件都在 [github.com/coreos/etcd/releases](https://github.com/coreos/etcd/releases/) 页面，用户可以选择需要的版本，或通过下载工具下载。
+Binaires compilés sont [github.com/coreos/etcd/releases](https://github.com/coreos/etcd/releases/) page,
+l'utilisateur peut sélectionner la version désirée, ou en téléchargeant le téléchargement de l'outil.
 
-例如，下面的命令使用 curl 工具下载压缩包，并解压。
-
+Par exemple, la commande suivante utilise l'outil curl pour télécharger compressé et décompressé.
 ```
 curl -L  https://github.com/coreos/etcd/releases/download/v2.0.0-rc.1/etcd-v2.0.0-rc.1-linux-amd64.tar.gz -o etcd-v2.0.0-rc.1-linux-amd64.tar.gz
 tar xzvf etcd-v2.0.0-rc.1-linux-amd64.tar.gz
 cd etcd-v2.0.0-rc.1-linux-amd64
 ```
 
-解压后，可以看到文件包括
+Après le déballage, vous pouvez voir le fichier comprend
 ```
 $ ls
 etcd  etcdctl  etcd-migrate  README-etcdctl.md  README.md
 ```
 
-其中 etcd 是服务主文件，etcdctl 是提供给用户的命令客户端，etcd-migrate 负责进行迁移。
+Service ETCD qui est le fichier principal, etcdctl est disponible pour la commande client de l'utilisateur, ETCD migrent responsable de la migration.
 
-推荐通过下面的命令将三个文件都放到系统可执行目录 `/usr/local/bin/` 或 `/usr/bin/`。
+Recommandé par commande suivante effectue trois fichiers dans le répertoire système `/usr/local/bin/` ou `/usr/bin/`。
 
 ```
 $ sudo cp etcd* /usr/local/bin/
 ```
-
-运行 etcd，将默认组件一个两个节点的集群。数据库服务端默认监听在 2379 和 4001 端口，etcd 实例监听在 2380 和 7001 端口。显示类似如下的信息：
+Exécutez ETCD, les composants par défaut d'un cluster à deux noeuds. Le serveur de base de données par défaut écoute sur le port 2379 et 4001,
+par exemple ETCD écoute sur le port 2380 et 7001. Affichage similaire à l'information suivante:
 ```
 $ ./etcd
 2014/12/31 14:52:09 no data-dir provided, using default data-dir ./default.etcd
@@ -54,25 +56,24 @@ $ ./etcd
 2014/12/31 14:52:11 raft.node: ce2a822cea30bfca elected leader ce2a822cea30bfca at term 2
 2014/12/31 14:52:11 etcdserver: published {Name:default ClientURLs:[http://localhost:2379 http://localhost:4001]} to cluster 7e27652122e8b2ae
 ```
-
-此时，可以使用 etcdctl 命令进行测试，设置和获取键值 `testkey: "hello world"`，检查 etcd 服务是否启动成功：
+À ce stade, vous pouvez utiliser le test commande etcdctl définir et obtenir la clé `testkey: "hello world"`, vérifiez ETCD service est démarré avec succès:
 ```
 $ ./etcdctl set testkey "hello world"
 hello world
 $ ./etcdctl get testkey
 hello world
 ```
-说明 etcd 服务已经成功启动了。
+Service Description ETCD a été lancé avec succès.
 
-当然，也可以通过 HTTP 访问本地 2379 或 4001 端口的方式来进行操作，例如查看 `testkey` 的值：
+Bien sûr, vous pouvez également accéder au port local 2379 ou 4001 par voie de HTTP pour fonctionner, telles que l'affichage `testkey` valeurs:
 ```
 $ curl -L http://localhost:4001/v2/keys/testkey
 {"action":"get","node":{"key":"/testkey","value":"hello world","modifiedIndex":3,"createdIndex":3}}
 ```
 
-### Docker 镜像方式下载
+### Docker téléchargement miroir
 
-镜像名称为 quay.io/coreos/etcd:v2.0.0_rc.1，可以通过下面的命令启动 etcd 服务监听到 4001 端口。
+Miroir nom quay.io/coreos/etcd:v2.0.0_rc.1, vous pouvez commencer à écouter le service 4001 port ETCD par la commande suivante.
 ```
 $ sudo docker run -p 4001:4001 -v /etc/ssl/certs/:/etc/ssl/certs/ quay.io/coreos/etcd:v2.0.0_rc.1
 ```
