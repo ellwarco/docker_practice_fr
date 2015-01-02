@@ -1,35 +1,45 @@
-## 为什么要使用 Docker？
-作为一种新兴的虚拟化方式，Docker 跟传统的虚拟化方式相比具有众多的优势。
+## Pourquoi utiliser Docker?
+Comme une nouvelle approche de la virtualisation, Docker à l'approche traditionnelle de virtualisation présente de nombreux avantages.
 
-首先，Docker 容器的启动可以在秒级实现，这相比传统的虚拟机方式要快得多。
-其次，Docker 对系统资源的利用率很高，一台主机上可以同时运行数千个 Docker 容器。
+Tout d'abord, commencer conteneurs Docker dans secondes pour réaliser que, par rapport à la manière traditionnelle des machines virtuelles est beaucoup plus rapide. Deuxièmement, la forte utilisation des ressources du système Docker, vous pouvez exécuter des milliers de conteneurs Docker sur un ordinateur hôte en même temps.
 
-容器除了运行其中应用外，基本不消耗额外的系统资源，使得应用的性能很高，同时系统的开销尽量小。传统虚拟机方式运行 10 个不同的应用就要起 10 个虚拟机，而Docker 只需要启动 10 个隔离的应用即可。
+En plus du récipient dans lequel l'application est exécutée, la base ne consomme des ressources système supplémentaires, rendant applications de haute performance, tandis que le coût du système la plus petite possible. Machines virtuelles traditionnelles fonctionnent 10 applications différentes joueraient 10 machines virtuelles, et Docker juste besoin de commencer 10 à isoler les applications.
 
-具体说来，Docker 在如下几个方面具有较大的优势。
+Plus précisément, Docker a un grand avantage dans les aspects suivants.
 
-### 更快速的交付和部署
-对开发和运维（devop）人员来说，最希望的就是一次创建或配置，可以在任意地方正常运行。
+### Livraison plus rapide et le déploiement
+Le développement et l'exploitation et l'entretien (devop) le personnel, le meilleur espoir est que, une fois créé,
+ou peut être configuré pour fonctionner correctement ne importe où.
 
-开发者可以使用一个标准的镜像来构建一套开发容器，开发完成之后，运维人员可以直接使用这个容器来部署代码。
-Docker 可以快速创建容器，快速迭代应用程序，并让整个过程全程可见，使团队中的其他成员更容易理解应用程序是如何创建和工作的。
-Docker 容器很轻很快！容器的启动时间是秒级的，大量地节约开发、测试、部署的时间。
+Les développeurs peuvent utiliser un ensemble standard de développement pour construire une image du conteneur, après le développement est terminé,
+le personnel d'exploitation et d'entretien peuvent utiliser ce contenant à déployer code directement.
 
-### 更高效的虚拟化
-Docker 容器的运行不需要额外的 hypervisor 支持，它是内核级的虚拟化，因此可以实现更高的性能和效率。
+Docker peut rapidement créer un conteneur, applications itératives rapides, et peut être vu à travers l'ensemble du processus,
+de sorte que d'autres membres de l'équipe sont plus faciles à comprendre comment l'application est de créer et de travail.
 
-### 更轻松的迁移和扩展
+Docker récipient très léger bientôt! Heure de départ est le deuxième niveau du conteneur,
+et d'économiser beaucoup de développement, les tests, le temps de déploiement.
 
-Docker 容器几乎可以在任意的平台上运行，包括物理机、虚拟机、公有云、私有云、个人电脑、服务器等。
-这种兼容性可以让用户把一个应用程序从一个平台直接迁移到另外一个。
+### Virtualisation plus efficace
+Docker récipient fonctionnement hyperviseur ne nécessite pas un soutien supplémentaire,
+ce est une virtualisation au niveau du noyau, il peut atteindre des performances et une efficacité accrue.
 
-### 更简单的管理
-使用 Docker，只需要小小的修改，就可以替代以往大量的更新工作。所有的修改都以增量的方式被分发和更新，从而实现自动化并且高效的管理。
+### De faciliter les migrations et l'expansion
 
-### 对比传统虚拟机总结
-| 特性 | 容器 | 虚拟机 |
+Docker conteneur peut fonctionner sur presque ne importe quelle plate-forme, y compris les machines physiques,
+machines virtuelles, cloud public, cloud privé, les PC, les serveurs et ainsi de suite.
+Cette compatibilité permet aux utilisateurs de migrer une application d'une plateforme à une autre.
+
+### Gestion simplifiée
+
+Utilisez Docker, seuls de petits changements, vous pouvez remplacer un grand nombre de mise à jour dans le passé.
+Toutes les modifications sont progressivement mis à jour et distribués, afin de réaliser l'automatisation et la gestion efficace.
+
+### Comparé au sommaire traditionnelle de la machine virtuelle
+
+| Propriété | Conteneur | Machine Virtuelle |
 | -- | -- | -- |
-| 启动 | 秒级 | 分钟级 |
-| 硬盘使用 | 一般为 MB | 一般为 GB |
-| 性能 | 接近原生 | 弱于 |
-| 系统支持量 | 单机支持上千个容器 | 一般几十个 |
+| Commencez | Deuxième année | Classe Minute |
+| Disque dur      | Généralement MB | Généralement Go |
+| Performance     | Près natif | Faible |
+| Système d'appui | Standalone prend en charge des milliers de conteneurs | Des dizaines générales |
