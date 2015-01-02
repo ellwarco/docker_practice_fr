@@ -2,8 +2,8 @@
 
 * [Avant-Propos](README.md)
 * [Docker Introduction](introduction/README.md)
-   * [Qu'est-ce que Docker](introduction/what.md)
-   * [Pourquoi utiliser Docker](introduction/why.md)
+   * [Qu'est-ce que Docker?](introduction/what.md)
+   * [Pourquoi utiliser Docker?](introduction/why.md)
 * [Concepts de base](basic_concept/README.md)
    * [Image](basic_concept/image.md)
    * [Conteneurs](basic_concept/container.md)
