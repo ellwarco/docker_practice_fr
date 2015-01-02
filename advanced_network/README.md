@@ -1,12 +1,19 @@
-# 高级网络配置
-本章将介绍 Docker 的一些高级网络配置和选项。
+# Configuration réseau avancée
+Docker chapitre décrit certaines des configurations et les options de réseau avancées.
 
-当 Docker 启动时，会自动在主机上创建一个 `docker0` 虚拟网桥，实际上是 Linux 的一个 bridge，可以理解为一个软件交换机。它会在挂载到它的网口之间进行转发。
+Lorsque Docker commence automatiquement créé sur l'hôte d'un `docker0` pont virtuel est en fait un pont Linux, et peut être comprise comme un commutateur logiciel.
+Il sera monté entre sa redirection de port de réseau.
 
-同时，Docker 随机分配一个本地未占用的私有网段（在 [RFC1918](http://tools.ietf.org/html/rfc1918) 中定义）中的一个地址给 `docker0` 接口。比如典型的 `172.17.42.1`，掩码为 `255.255.0.0`。此后启动的容器内的网口也会自动分配一个同一网段（`172.17.0.0/16`）的地址。
+Pendant ce temps, Docker assignés au hasard à un segment local inoccupé de réseau privé (en [RFC1918](http://tools.ietf.org/html/rfc1918) définition)
+dans un discours à l' `docker0` interface. Par exemple, un typique `172.17.42.1`, le masque `255.255.0.0`. port Ethernet attribuera automatiquement
+un différents segments du réseau (ci-après initiée récipient `172.17.0.0/16` d'adresse).
 
-当创建一个 Docker 容器的时候，同时会创建了一对 `veth pair` 接口（当数据包发送到一个接口时，另外一个接口也可以收到相同的数据包）。这对接口一端在容器内，即 `eth0`；另一端在本地并被挂载到 `docker0` 网桥，名称以 `veth` 开头（例如 `vethAQI2QT`）。通过这种方式，主机可以跟容器通信，容器之间也可以相互通信。Docker 就创建了在主机和所有容器之间一个虚拟共享网络。
+Lors de la création d'un récipient lorsque Docker, et il va créer une paire de `veth pair` interface (si le paquet est envoyé à une interface,
+une autre interface peut également recevoir le même paquet). Cette interface à une extrémité du récipient, ce est- `eth0`; et l'autre extrémité est montée
+localement `docker0` noms de pont `veth` début (par exemple `vethAQI2QT`). De cette manière, l'hôte peut communiquer avec le entre le récipient,
+le récipient peut aussi communiquer avec l'autre. Docker est créé entre l'hôte et tous les conteneurs dans un réseau virtuel partagé.
 
-![Docker 网络](../_images/network.png)
+![Réseau Docker](../_images/network.png)
 
-接下来的部分将介绍在一些场景中，Docker 所有的网络定制配置。以及通过 Linux 命令来调整、补充、甚至替换 Docker 默认的网络配置。
+La section suivante décrit certains scénarios, Docker personnaliser toutes les configurations réseau. Ainsi que la commande Linux pour ajuster,
+de compléter ou même remplacer la configuration réseau par défaut Docker.
