@@ -1,18 +1,21 @@
-## 私有仓库
+## Entrepôt privé
 
-有时候使用 Docker Hub 这样的公共仓库可能不方便，用户可以创建一个本地仓库供私人使用。
+Parfois, l'utilisation d'un tel entrepôt public Docker Hub peut être gênant, les utilisateurs peuvent créer un référentiel local pour un usage privé.
 
-本节介绍如何使用本地仓库。
+Cette section décrit comment utiliser un entrepôt local.
 
-`docker-registry` 是官方提供的工具，可以用于构建私有的镜像仓库。
-### 安装运行 docker-registry
-#### 容器运行
-在安装了 Docker 后，可以通过获取官方 registry 镜像来运行。
+`docker-registry` est un outil fourni par le fonctionnaire, le miroir peut être utilisé pour construire un entrepôt privé.
+
+### Installation et le fonctionnement docker-registre
+#### opération de conteneurs
+
+Après avoir installé Docker, vous pouvez obtenir le registre officiel en miroir afin de fonctionner.
 ```
 $ sudo docker run -d -p 5000:5000 registry
 ```
-这将使用官方的 registry 镜像来启动本地的私有仓库。
-用户可以通过指定参数来配置私有仓库位置，例如配置镜像存储到 Amazon S3 服务。
+Il utilisera un miroir pour démarrer le registre officiel de l'entrepôt privé local.
+Les utilisateurs peuvent configurer un emplacement entrepôt privé en spécifiant des paramètres tels que l'image
+de configuration stockées dans le service Amazon S3.
 ```
 $ sudo docker run \
          -e SETTINGS_FLAVOR=s3 \
@@ -24,18 +27,19 @@ $ sudo docker run \
          -p 5000:5000 \
          registry
 ````
-此外，还可以指定本地路径（如 `/home/user/registry-conf` ）下的配置文件。
+En outre, vous pouvez également spécifier un chemin d'accès local (par exemple, `/home/user/registry-conf` fichier de configuration sous).
 ```
 $ sudo docker run -d -p 5000:5000 -v /home/user/registry-conf:/registry-conf -e DOCKER_REGISTRY_CONFIG=/registry-conf/config.yml registry
 ```
-默认情况下，仓库会被创建在容器的 `/tmp/registry` 下。可以通过 `-v` 参数来将镜像文件存放在本地的指定路径。
-例如下面的例子将上传的镜像放到 `/opt/data/registry` 目录。
+Par défaut, le dépôt sera créé dans le conteneur `/tmp/registry` sous. Par `-v` argument pour spécifier le chemin vers le fichier image stocké dans le local.
+Comme les exemples suivants seront télécharger l'image dans `/opt/data/registry` répertoire.
 ```
 $ sudo docker run -d -p 5000:5000 -v /opt/data/registry:/tmp/registry registry
 ```
 
-#### 本地安装
-对于 Ubuntu 或 CentOS 等发行版，可以直接通过源安装。
+#### Installation locale
+
+Pour Ubuntu ou CentOS de presse, etc., peuvent être installés directement par la source.
 * Ubuntu
 ```
 $ sudo apt-get install -y build-essential python-dev libevent-dev python-pip liblzma-dev
@@ -47,33 +51,35 @@ $ sudo yum install -y python-devel libevent-devel python-pip gcc xz-devel
 $ sudo python-pip install docker-registry
 ```
 
-也可以从 [docker-registry](https://github.com/docker/docker-registry) 项目下载源码进行安装。
+Aussi à partir du [docker-registry](https://github.com/docker/docker-registry) source du projet d'installation de téléchargement.
 ```
 $ sudo apt-get install build-essential python-dev libevent-dev python-pip libssl-dev liblzma-dev libffi-dev
 $ git clone https://github.com/docker/docker-registry.git
 $ cd docker-registry
 $ sudo python setup.py install
 ```
-然后修改配置文件，主要修改 dev 模板段的 `storage_path` 到本地的存储仓库的路径。
+Puis modifier le fichier de configuration, les principaux segments de modèle de changement de dev `storage_path` le chemin à un entrepôt de stockage local.
 ```
 $ cp config/config_sample.yml config/config.yml
 ```
-之后启动 Web 服务。
+Après le démarrage du service Web.
 ```
 $ sudo gunicorn -c contrib/gunicorn.py docker_registry.wsgi:application
 ```
-或者
+Ou
 ```
 $ sudo gunicorn --access-logfile - --error-logfile - -k gevent -b 0.0.0.0:5000 -w 4 --max-requests 100 docker_registry.wsgi:application
 ```
-此时使用访问本地的 5000 端口，看到输出 docker-registry 的版本信息说明运行成功。
+Cette fois, en utilisant le port d'accès local 5000, a vu informations sur la version sortie instructions docker-registry immatriculation afin de fonctionner correctement.
 
-*注：`config/config_sample.yml` 文件是示例配置文件。
+* Note: `config/config_sample.yml` fichier est un fichier de configuration de l'échantillon.
 
-###在私有仓库上传、下载、搜索镜像
-创建好私有仓库之后，就可以使用 `docker tag` 来标记一个镜像，然后推送它到仓库，别的机器上就可以下载下来了。例如私有仓库地址为 `192.168.7.26:5000`。
+### Dans un entrepôt privé télécharger, miroirs de recherche
 
-先在本机查看已有的镜像。
+Après la création d'un entrepôt privé, vous pouvez utiliser `docker tag` pour marquer un miroir, et poussez-le à l'entrepôt,
+sur les autres machines peuvent être téléchargés vers le bas. Telles que l'adresse de l'entrepôt privé `192.168.7.26:5000`.
+
+D'abord dans la machine pour afficher des images existantes.
 ```
 $ sudo docker images
 REPOSITORY                        TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
@@ -81,7 +87,7 @@ ubuntu                            latest              ba5877dc9bec        6 week
 ubuntu                            14.04               ba5877dc9bec        6 weeks ago         192.7 MB
 ```
 
-使用`docker tag` 将 `ba58` 这个镜像标记为 `192.168.7.26:5000/test`（格式为 `docker tag IMAGE[:TAG] [REGISTRYHOST/][USERNAME/]NAME[:TAG]`）。
+Utilisez `docker tag` sera `ba58` cette image étiqueté comme `192.168.7.26:5000/test` (le format `docker tag IMAGE[:TAG] [REGISTRYHOST/][USERNAME/]NAME[:TAG]`).
 ```
 $ sudo docker tag ba58 192.168.7.26:5000/test
 root ~ # docker images
@@ -90,7 +96,7 @@ ubuntu                            14.04               ba5877dc9bec        6 week
 ubuntu                            latest              ba5877dc9bec        6 weeks ago         192.7 MB
 192.168.7.26:5000/test            latest              ba5877dc9bec        6 weeks ago         192.7 MB
 ```
-使用 `docker push` 上传标记的镜像。
+Utilisez `docker push` téléchargement étiqueté image.
 ```
 $ sudo docker push 192.168.7.26:5000/test
 The push refers to a repository [192.168.7.26:5000/test] (len: 1)
@@ -104,14 +110,14 @@ Image 2318d26665ef already pushed, skipping
 Image ba5877dc9bec already pushed, skipping
 Pushing tag for rev [ba5877dc9bec] on {http://192.168.7.26:5000/v1/repositories/test/tags/latest}
 ```
-用 curl 查看仓库中的镜像。
+Vérifiez avec `curl` dans l'image de l'entrepôt.
 ```
 $ curl http://192.168.7.26:5000/v1/search
 {"num_results": 7, "query": "", "results": [{"description": "", "name": "library/miaxis_j2ee"}, {"description": "", "name": "library/tomcat"}, {"description": "", "name": "library/ubuntu"}, {"description": "", "name": "library/ubuntu_office"}, {"description": "", "name": "library/desktop_ubu"}, {"description": "", "name": "dockerfile/ubuntu"}, {"description": "", "name": "library/test"}]}
 ```
-这里可以看到 `{"description": "", "name": "library/test"}`，表明镜像已经被成功上传了。
+Ici vous pouvez voir `{"description": "", "name": "library/test"}`, ce miroir a été téléchargé avec succès.
 
-现在可以到另外一台机器去下载这个镜像。
+Vous pouvez maintenant aller vers une autre machine pour télécharger cette image.
 ```
 $ sudo docker pull 192.168.7.26:5000/test
 Pulling repository 192.168.7.26:5000/test
@@ -126,7 +132,8 @@ REPOSITORY                         TAG                 IMAGE ID            CREAT
 192.168.7.26:5000/test             latest              ba5877dc9bec        6 weeks ago         192.7 MB
 ```
 
-可以使用 [这个脚本](https://github.com/yeasy/docker_practice/raw/master/_local/push_images.sh) 批量上传本地的镜像到注册服务器中，默认是本地注册服务器 `127.0.0.1:5000`。例如：
+Vous pouvez utiliser [ce script](https://github.com/yeasy/docker_practice/raw/master/_local/push_images.sh) pour télécharger vrac miroir local
+pour le serveur d'enregistrement, la valeur par défaut est le serveur d'enregistrement local `127.0.0.1:5000`. Par exemple:
 ```
 $ wget https://github.com/yeasy/docker_practice/raw/master/_local/push_images.sh; sudo chmod a+x push_images.sh
 $ ./push_images.sh ubuntu:latest centos:centos7
