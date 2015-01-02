@@ -1,35 +1,44 @@
-## 容器访问控制
-容器的访问控制，主要通过 Linux 上的 `iptables` 防火墙来进行管理和实现。`iptables` 是 Linux 上默认的防火墙软件，在大部分发行版中都自带。
+## Conteneur de contrôle d'accès
 
-### 容器访问外部网络
-容器要想访问外部网络，需要本地系统的转发支持。在Linux 系统中，检查转发是否打开。
+contrôle d'accès de conteneurs, principalement par le biais sur Linux `iptables` gestion et la mise en œuvre pare-feu. `iptables` est la valeur par défaut sur
+le logiciel de pare-feu Linux, livré avec la plupart des rejets.
 
+### Conteneur pour accéder au réseau externe
+
+Container Pour accéder au réseau externe, vous devez être transmis à soutenir le système local. Sur les systèmes Linux, vérifiez la transmission est activée.
 ```
 $sysctl net.ipv4.ip_forward
 net.ipv4.ip_forward = 1
 ```
-如果为 0，说明没有开启转发，则需要手动打开。
+Si elle est nulle, indiquant pas en avant ouverts, vous aurez besoin d'ouvrir manuellement.
 ```
 $sysctl -w net.ipv4.ip_forward=1
 ```
-如果在启动 Docker 服务的时候设定 `--ip-forward=true`, Docker 就会自动设定系统的 `ip_forward` 参数为 1。
+Si le service est configuré pour démarrer lorsque Docker `--ip-forward=true`, Docker règle automatiquement le système `ip_forward` paramètre à 1.
 
-### 容器之间访问
-容器之间相互访问，需要两方面的支持。
-* 容器的网络拓扑是否已经互联。默认情况下，所有容器都会被连接到 `docker0` 网桥上。
-* 本地系统的防火墙软件 -- `iptables` 是否允许通过。
+### L'accès entre le récipient
 
-#### 访问所有端口
-当启动 Docker 服务时候，默认会添加一条转发策略到 iptables 的 FORWARD 链上。策略为通过（`ACCEPT`）还是禁止（`DROP`）取决于配置`--icc=true`（缺省值）还是 `--icc=false`。当然，如果手动指定 `--iptables=false` 则不会添加 `iptables` 规则。
+Visites mutuelles entre le conteneur, la nécessité de soutenir à la fois.
 
-可见，默认情况下，不同容器之间是允许网络互通的。如果为了安全考虑，可以在 `/etc/default/docker` 文件中配置 `DOCKER_OPTS=--icc=false` 来禁止它。
+* Si le récipient a été connecté topologie du réseau. Par défaut, tous les conteneurs seront connectés à `docker0` le pont.
+* Pare-feu locaux du système logiciel - `iptables` est autorisé à traverser.
 
-#### 访问指定端口
-在通过 `-icc=false` 关闭网络访问后，还可以通过 `--link=CONTAINER_NAME:ALIAS` 选项来访问容器的开放端口。
+### Accès à tous les ports
 
-例如，在启动 Docker 服务时，可以同时使用 `icc=false --iptables=true` 参数来关闭允许相互的网络访问，并让 Docker 可以修改系统中的 `iptables` 规则。
+Lorsque le démarrage du service Docker, le défaut va ajouter une politique de transfert de la chaîne FORWARD de iptables.
+Stratégie par ( `ACCEPT` ) ou désactivé ( `DROP` ) selon la configuration `--icc=true` (par défaut) ou `--icc=false`.
+Bien sûr, si vous spécifiez manuellement `--iptables=false` ne pas ajouter `iptables` règles.
 
-此时，系统中的 `iptables` 规则可能是类似
+Visible, par défaut, est de permettre l'interopérabilité entre les différents réseaux de conteneur.
+Si pour des raisons de sécurité dans `/etc/default/docker` profil `DOCKER_OPTS=--icc=false` pour le désactiver.
+
+### L'accès au port spécifié
+
+Par -icc=false accès réseau fermé, vous pouvez également passer --link=CONTAINER_NAME:ALIAS option pour ouvrir l'accès au port de conteneurs.
+
+Par exemple, lorsque vous démarrez les services Docker, vous pouvez utiliser icc=false --iptables=true paramètre d'arrêter pour permettre l'accès au réseau à l'autre, et de laisser le système peut être modifié Docker iptables règles.
+
+À ce stade, le système `iptables` règles peuvent être similaires
 ```
 $ sudo iptables -nL
 ...
@@ -38,10 +47,10 @@ target     prot opt source               destination
 DROP       all  --  0.0.0.0/0            0.0.0.0/0
 ...
 ```
+Après cela, démarrez le conteneur ( `docker run` ) lorsqu'il est utilisé `--link=CONTAINER_NAME:ALIAS` option. Docker dans `iptable` ont été ajoutés
+à un deux conteneurs `ACCEPT` règles pour permettre l'accès mutuel aux ouvrir des ports (en fonction de la ligne EXPOSE Dockerfile).
 
-之后，启动容器（`docker run`）时使用 `--link=CONTAINER_NAME:ALIAS` 选项。Docker 会在 `iptable` 中为 两个容器分别添加一条 `ACCEPT` 规则，允许相互访问开放的端口（取决于 Dockerfile 中的 EXPOSE 行）。
-
-当添加了 `--link=CONTAINER_NAME:ALIAS` 选项后，添加了 `iptables` 规则。
+Lorsque vous ajoutez un `--link=CONTAINER_NAME:ALIAS` après l'option d'ajouter les `iptables` règles.
 ```
 $ sudo iptables -nL
 ...
@@ -52,4 +61,5 @@ ACCEPT     tcp  --  172.17.0.3           172.17.0.2           tcp dpt:80
 DROP       all  --  0.0.0.0/0            0.0.0.0/0
 ```
 
-注意：`--link=CONTAINER_NAME:ALIAS` 中的 `CONTAINER_NAME` 目前必须是 Docker 分配的名字，或使用 `--name` 参数指定的名字。主机名则不会被识别。
+Remarque: `--link=CONTAINER_NAME:ALIAS` dans `CONTAINER_NAME` Docker doivent maintenant être affectés nom, ou utilisez le `--name` paramètre pour spécifier le nom.
+Nom de l'hôte ne est pas reconnu.
