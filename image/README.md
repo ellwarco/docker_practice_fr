@@ -1,10 +1,11 @@
-# Docker 镜像
+# Docker Miroir
+Avant la présentation, nous savons que le miroir est une des trois composantes de Docker de.
 
-在之前的介绍中，我们知道镜像是 Docker 的三大组件之一。
+Docker exige une présence locale avant d'exécuter contenant miroir correspondant si le miroir ne existe pas localement,
+Docker sera téléchargé à partir d'un dépôt miroir (par défaut est le serveur d'inscription publique Docker Hub entrepôt).
 
-Docker 运行容器前需要本地存在对应的镜像，如果镜像不存在本地，Docker 会从镜像仓库下载（默认是 Docker Hub 公共注册服务器中的仓库）。
+Ce chapitre décrit plus sur le contenu de l'image, y compris:
 
-本章将介绍更多关于镜像的内容，包括：
-* 从仓库获取镜像；
-* 管理本地主机上的镜像；
-* 介绍镜像实现的基本原理。
+* Obtenez un miroir de l'entrepôt;
+* Image administrative sur l'hôte local;
+* Décrit le principe de base de la mise en miroir.
