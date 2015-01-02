@@ -1,8 +1,14 @@
-## 控制组
-控制组是 Linux 容器机制的另外一个关键组件，负责实现资源的审计和限制。
+## Groupe de contrôle
 
-它提供了很多有用的特性；以及确保各个容器可以公平地分享主机的内存、CPU、磁盘 IO 等资源；当然，更重要的是，控制组确保了当容器内的资源使用产生压力时不会连累主机系统。
+Groupe de contrôle est un autre élément clé des mécanismes responsables de l'application des contraintes de vérification et des ressources conteneurs Linux.
 
-尽管控制组不负责隔离容器之间相互访问、处理数据和进程，它在防止拒绝服务（DDOS）攻击方面是必不可少的。尤其是在多用户的平台（比如公有或私有的 PaaS）上，控制组十分重要。例如，当某些应用程序表现异常的时候，可以保证一致地正常运行和性能。
+Il fournit beaucoup de fonctionnalités utiles et assurer une part équitable de chaque conteneur peut accueillir mémoire, CPU, disque IO
+et d'autres ressources, bien sûr, plus important encore, pour se assurer que le groupe de contrôle lorsque l'utilisation des ressources
+pour générer une pression à l'intérieur du conteneur ne est pas coutume le système hôte.
 
-控制组机制始于 2006 年，内核从 2.6.24 版本开始被引入。
+Bien que le groupe de contrôle ne était pas responsable de l'isolement des visites mutuelles entre le conteneur,
+les données de processus et de le traiter pour prévenir par déni de service (DDOS) est essentiel. Surtout dans une plate-forme multi-utilisateur
+(comme PaaS public ou privé), le groupe de contrôle est très important. Par exemple, quand un certain anomalies de performances des applications,
+ils peuvent assurer la disponibilité et des performances constantes.
+
+mécanisme de groupe de contrôle a débuté en 2006, a été introduit à partir de la version 2.6.24 du noyau début.
