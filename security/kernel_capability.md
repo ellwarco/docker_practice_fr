@@ -1,26 +1,36 @@
-## 内核能力机制
+## Les capacités fondamentales mécanisme
 
-能力机制（Capability）是 Linux 内核一个强大的特性，可以提供细粒度的权限访问控制。
-Linux 内核自 2.2 版本起就支持能力机制，它将权限划分为更加细粒度的操作能力，既可以作用在进程上，也可以作用在文件上。
+mécanisme de capacités (Capability) est une fonctionnalité puissante du noyau Linux, peut fournir des autorisations de contrôle d'accès à grains fins.
+Noyau Linux depuis la version 2.2 soutiendra mécanisme de capacité, il sera divisé en autorisations plus fine capacité opérationnelle,
+les deux agissant sur le processus peut également être appliqué au fichier.
 
-例如，一个 Web 服务进程只需要绑定一个低于 1024 的端口的权限，并不需要 root 权限。那么它只需要被授权 `net_bind_service` 能力即可。此外，还有很多其他的类似能力来避免进程获取 root 权限。
+Par exemple, un processus de service Web ne requiert que lier un port inférieur à 1024 autorisations, ne nécessite pas les privilèges root.
+Donc, il ne doit être autorisée `net_bind_service` capacité peut être. En outre, il y a beaucoup d'autres aptitudes similaires pour éviter
+le processus pour obtenir les privilèges root.
 
-默认情况下，Docker 启动的容器被严格限制只允许使用内核的一部分能力。
+Par défaut, Docker début du conteneur est limitée pour permettre à une partie seulement de la capacité d'utiliser le noyau.
 
-使用能力机制对加强 Docker 容器的安全有很多好处。通常，在服务器上会运行一堆需要特权权限的进程，包括有 ssh、cron、syslogd、硬件管理工具模块（例如负载模块）、网络配置工具等等。容器跟这些进程是不同的，因为几乎所有的特权进程都由容器以外的支持系统来进行管理。
-* ssh 访问被主机上ssh服务来管理；
-* cron 通常应该作为用户进程执行，权限交给使用它服务的应用来处理；
-* 日志系统可由 Docker 或第三方服务管理；
-* 硬件管理无关紧要，容器中也就无需执行 udevd 以及类似服务；
-* 网络管理也都在主机上设置，除非特殊需求，容器不需要对网络进行配置。
+La possibilité d'utiliser le mécanisme de renforcer la sécurité des conteneurs Docker présente de nombreux avantages.
+Typiquement, un processus se exécutant sur le serveur, il faudra un tas de droits privilégiés, incluant ssh, cron, syslogd,
+le module de l'outil de gestion du matériel (un module de charge), des outils de configuration de réseau.
+Récipient avec ces processus sont différents, parce que presque tous les privilèges du processus par le système conteneur soutien extérieur à gérer.
 
-从上面的例子可以看出，大部分情况下，容器并不需要“真正的” root 权限，容器只需要少数的能力即可。为了加强安全，容器可以禁用一些没必要的权限。
-* 完全禁止任何 mount 操作；
-* 禁止直接访问本地主机的套接字；
-* 禁止访问一些文件系统的操作，比如创建新的设备、修改文件属性等；
-* 禁止模块加载。
+* Accès ssh service ssh sur l'hôte de gérer;
+* cron normalement être exécuté comme un processus utilisateur, l'autorisation d'utiliser l'application pour gérer qu'il dessert;
+* Par Docker système de journal ou d'une gestion des services tiers;
+* la gestion du matériel ne est pas pertinent, le conteneur devra fournir des services de udevd et similaires;
+* La gestion du réseau sont également mis en place sur l'hôte, à moins que des besoins spéciaux, le conteneur n'a pas besoin d'être configuré sur le réseau.
 
-这样，就算攻击者在容器中取得了 root 权限，也不能获得本地主机的较高权限，能进行的破坏也有限。
+Comme on peut le voir dans l'exemple ci-dessus, dans la plupart des cas, le conteneur n'a pas besoin un "vrai" privilèges root,
+le conteneur ne peut être qu'un petit nombre de capacités. Pour plus de sécurité, le conteneur peut désactiver certaines autorisations inutiles.
+* Une interdiction complète de toute opération de montage;
+* Interdire l'accès direct à l'hôte local de la prise;
+* Interdire l'accès au système d'exploitation, certains fichiers, tels que la création d'un nouvel appareil, modifier les attributs de fichiers;
+* Désactiver le module chargé.
 
-默认情况下，Docker采用 [白名单](https://github.com/docker/docker/blob/master/daemon/execdriver/native/template/default_template.go) 机制，禁用 [必需功能](https://github.com/docker/docker/blob/master/daemon/execdriver/native/template/default_template.go) 之外的其它权限。
-当然，用户也可以根据自身需求来为 Docker 容器启用额外的权限。
+Ainsi, même si un attaquant gagne privilèges root dans le conteneur, il ne peut pas obtenir des privilèges plus élevés sur l'hôte local,
+la destruction peut être effectuée est limitée.
+
+Par défaut, Docker utilisant [liste blanche](https://github.com/docker/docker/blob/master/daemon/execdriver/native/template/default_template.go)
+mécanisme pour désactiver [les fonctions essentielles](https://github.com/docker/docker/blob/master/daemon/execdriver/native/template/default_template.go)
+autres que le privilège. Bien sûr, les utilisateurs peuvent également activer les autorisations supplémentaires pour Docker récipient en fonction de leurs besoins.
