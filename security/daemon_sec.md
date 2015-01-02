@@ -1,18 +1,35 @@
-## Docker服务端的防护
-运行一个容器或应用程序的核心是通过 Docker 服务端。Docker 服务的运行目前需要 root 权限，因此其安全性十分关键。
+## La protection du serveur Docker
 
-首先，确保只有可信的用户才可以访问 Docker 服务。Docker 允许用户在主机和容器间共享文件夹，同时不需要限制容器的访问权限，这就容易让容器突破资源限制。例如，恶意用户启动容器的时候将主机的根目录`/`映射到容器的 `/host` 目录中，那么容器理论上就可以对主机的文件系统进行任意修改了。这听起来很疯狂？但是事实上几乎所有虚拟化系统都允许类似的资源共享，而没法禁止用户共享主机根文件系统到虚拟机系统。
+Core se exécute un conteneur ou une application serveur en Docker. Services Run Docker exigent actuellement des privilèges root, de sorte que la sécurité est très critique.
 
-这将会造成很严重的安全后果。因此，当提供容器创建服务时（例如通过一个 web 服务器），要更加注意进行参数的安全检查，防止恶意的用户用特定参数来创建一些破坏性的容器
+Tout d'abord, assurez-vous que seuls les utilisateurs de confiance peuvent accéder au service Docker. Docker permet aux utilisateurs de partager
+des fichiers entre l'hôte et le dossier de conteneur, mais n'a pas besoin de restreindre l'accès au conteneur, qui est facile de laisser les limites
+de ressources contenant de rupture. Par exemple, quand un utilisateur malveillant pour démarrer un conteneur dans le répertoire racine de
+l'hôte `/` mappé sur le conteneur `/host` répertoire, puis le récipient peut théoriquement accueillir système de fichiers modifiée arbitrairement.
+Cela semble fou? Mais le fait que presque tous les systèmes de virtualisation permettent un partage de ressources similaire,
+mais ne peuvent pas empêcher les utilisateurs de partager le système de fichiers racine de l'hôte d'un système de machine virtuelle.
 
-为了加强对服务端的保护，Docker 的 REST API（客户端用来跟服务端通信）在 0.5.2 之后使用本地的 Unix 套接字机制替代了原先绑定在 127.0.0.1 上的 TCP 套接字，因为后者容易遭受跨站脚本攻击。现在用户使用 Unix 权限检查来加强套接字的访问安全。
+Il en résultera des conséquences très graves de sécurité. Ainsi, lorsque le conteneur est créé pour fournir le service (par exemple, par un serveur web),
+accorder plus d'attention aux paramètres de contrôles de sécurité pour empêcher un utilisateur malveillant avec des paramètres spécifiques
+pour créer une certaine récipient destructrice
 
-用户仍可以利用 HTTP 提供 REST API 访问。建议使用安全机制，确保只有可信的网络或 VPN，或证书保护机制（例如受保护的 stunnel 和 ssl 认证）下的访问可以进行。此外，还可以使用 HTTPS 和证书来加强保护。
+Afin de renforcer la protection du serveur, REST API de Docker (utilisé par les clients pour communiquer avec le serveur) en utilisant un mécanisme local
+de socket Unix pour remplacer l'original relié à la prise TCP 127.0.0.1 après 0.5.2, parce que ces derniers sont vulnérables aux attaques cross-site scripting.
+Pour améliorer les utilisateurs de sécurité d'accès utilisent maintenant Unix contrôles d'autorisation de prise.
 
-最近改进的 Linux 名字空间机制将可以实现使用非 root 用户来运行全功能的容器。这将从根本上解决了容器和主机之间共享文件系统而引起的安全问题。
+Les utilisateurs peuvent toujours utiliser l'API REST HTTP donne accès. Recommander l'utilisation de mécanismes de sécurité pour se assurer que seule
+la confiance des mécanismes de protection de certificat (comme stunnel protégé et certificat SSL) réseau ou VPN, ou peut être consultée sous.
+En outre, vous pouvez également utiliser des certificats HTTPS et à renforcer la protection.
 
-终极目标是改进 2 个重要的安全特性：
-* 将容器的 root 用户映射到本地主机上的非 root 用户，减轻容器和主机之间因权限提升而引起的安全问题；
-* 允许 Docker 服务端在非 root 权限下运行，利用安全可靠的子进程来代理执行需要特权权限的操作。这些子进程将只允许在限定范围内进行操作，例如仅仅负责虚拟网络设定或文件系统管理、配置操作等。
+Mécanisme de namespace Linux récemment modifié peut être obtenu en utilisant un utilisateur non-root pour exécuter un conteneur entièrement fonctionnel.
+Ce sera fondamentalement résoudre partagée entre le réservoir et le système de fichier hôte et les problèmes de sécurité de cause.
 
-最后，建议采用专用的服务器来运行 Docker 和相关的管理服务（例如管理服务比如 ssh 监控和进程监控、管理工具 nrpe、collectd 等）。其它的业务服务都放到容器中去运行。
+Le but ultime est d'améliorer deux dispositifs de sécurité importants:
+* L'utilisateur root est mappé à l'utilisateur contenant non-root sur l'hôte local, atténuer les problèmes de sécurité causés par une élévation de privilèges
+entre le conteneur et l'hôte provoquée;
+* Autoriser serveur Docker dans un cadre privilégié non-root afin de fonctionner, l'utilisation d'un fonctionnement sûr et fiable du processus fils
+pour exécuter le privilège de proxy autorisations requises. Ces sous-processus ne seront autorisés à fonctionner dans une plage limitée,
+comme seul responsable des paramètres de réseau virtuel ou de la gestion du système de fichiers, la configuration, l'exploitation, etc.
+
+Enfin, nous recommandons d'utiliser un serveur dédié afin de fonctionner Docker et des services de gestion connexes (tels que les services de gestion
+telles que la surveillance de ssh et la surveillance de processus, outils de gestion nrpe, collectd, etc.). Autres services commerciaux qui vont courir dans le récipient.
