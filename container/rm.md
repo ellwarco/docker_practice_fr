@@ -1,9 +1,8 @@
-##删除容器
-可以使用 `docker rm` 来删除一个处于终止状态的容器。
-例如
+##Retirer le récipient
+
+Vous pouvez utiliser le `docker rm` pour enlever un conteneur dans la cessation de l'état. Comme
 ```
 $sudo docker rm  trusting_newton
 trusting_newton
 ```
-如果要删除一个运行中的容器，可以添加 `-f` 参数。Docker 会发送 `SIGKILL` 信号给容器。
-
+Si vous voulez supprimer un conteneur en cours d'exécution, vous pouvez ajouter `-f` paramètre. Docker enverra `SIGKILL` signal au conteneur.
