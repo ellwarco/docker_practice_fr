@@ -1,8 +1,11 @@
-## Docker 容器
-Docker 利用容器来运行应用。
+## Récipient Docker
 
-容器是从镜像创建的运行实例。它可以被启动、开始、停止、删除。每个容器都是相互隔离的、保证安全的平台。
+Docker utiliser récipient pour exécuter des applications.
 
-可以把容器看做是一个简易版的 Linux 环境（包括root用户权限、进程空间、用户空间和网络空间等）和运行在其中的应用程序。
+Conteneur fonctionne instance créée de l'image. Il peut être démarré, démarrer, arrêter supprimer.
+Chaque récipient est isolé pour assurer la sécurité de la plate-forme.
 
-*注：镜像是只读的，容器在启动的时候创建一层可写层作为最上层。
+Le récipient peut être considéré comme une version simple de l'environnement Linux (y compris l'utilisateur root privilèges,
+espace de processus, l'espace utilisateur et le cyberespace, etc.) et les applications fonctionnant sur eux.
+
+* Remarque: L'image est en lecture seule, le conteneur crée une couche inscriptible couche supérieure au moment du démarrage.
