@@ -1,10 +1,13 @@
-## 映射容器端口到宿主主机的实现
+## Mappage de port de conteneurs pour atteindre l'hôte d'accueil
 
-默认情况下，容器可以主动访问到外部网络的连接，但是外部网络无法访问到容器。
-### 容器访问外部实现
-容器所有到外部网络的连接，源地址都会被NAT成本地系统的IP地址。这是使用 `iptables` 的源地址伪装操作实现的。
+Par défaut, le récipient peut accéder activement à la connexion de réseau externe, mais le réseau externe ne peut pas accéder au conteneur.
 
-查看主机的 NAT 规则。
+### L'accès à des outils externes des récipients
+
+Tout récipient est connecté au réseau externe, l'adresse IP source de l'adresse NAT sera le coût du système.
+Ceci est fait en utilisant iptables opérations de camouflage adresse de la source sont appliquées.
+
+Voir règles NAT hôte.
 ```
 $ sudo iptables -t nat -nL
 ...
@@ -13,15 +16,17 @@ target     prot opt source               destination
 MASQUERADE  all  --  172.17.0.0/16       !172.17.0.0/16
 ...
 ```
-其中，上述规则将所有源地址在 `172.17.0.0/16` 网段，目标地址为其他网段（外部网络）的流量动态伪装为从系统网卡发出。MASQUERADE 跟传统 SNAT 的好处是它能动态从网卡获取地址。
+Parmi eux, les règles ci-dessus seront tous adresses source `172.17.0.0/16` segment de réseau, l'adresse de destination pour d'autres segments de réseau (réseau externe)
+de la circulation émanant du système de carte de camouflage dynamique. SNAT MASQUERADE avec les avantages traditionnels est qu'il peut obtenir de façon dynamique
+des adresses à partir de la carte réseau.
 
-### 外部访问容器实现
+### L'accès externe au récipient pour parvenir
 
-容器允许外部访问，可以在 `docker run` 时候通过 `-p` 或 `-P` 参数来启用。
+Les conteneurs permettent l'accès externe, vous pouvez `docker run` travers quand `-p` ou `-P` pour permettre paramètre.
 
-不管用那种办法，其实也是在本地的 `iptable` 的 nat 表中添加相应的规则。
+Peu importe le genre de manière, il est en fait la locale `iptable` ajouter les règles appropriées de table nat.
 
-使用 `-P` 时：
+Utilisez `-P` lorsque:
 ```
 $ iptables -t nat -nL
 ...
@@ -30,14 +35,17 @@ target     prot opt source               destination
 DNAT       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:49153 to:172.17.0.2:80
 ```
 
-使用 `-p 80:80` 时：
+Utilisez `-p 80:80` lorsque:
 ```
 $ iptables -t nat -nL
 Chain DOCKER (2 references)
 target     prot opt source               destination
 DNAT       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:80 to:172.17.0.2:80
 ```
-注意：
-* 这里的规则映射了 0.0.0.0，意味着将接受主机来自所有接口的流量。用户可以通过 `-p IP:host_port:container_port` 或 `-p
-IP::port` 来指定允许访问容器的主机上的 IP、接口等，以制定更严格的规则。
-* 如果希望永久绑定到某个固定的 IP 地址，可以在 Docker 配置文件 `/etc/default/docker` 中指定 `DOCKER_OPTS="--ip=IP_ADDRESS"`，之后重启 Docker 服务即可生效。
+Remarque:
+
+* Voici la règle mappé 0.0.0.0, ce qui signifie l'hôte accepter le trafic de toutes les interfaces.
+Les utilisateurs peuvent `-p IP:host_port:container_port` ou `-p IP::port` sur l'hôte de préciser permis l'accès à l'adresse IP du récipient, interfaces, etc.,
+d'introduire des règles plus strictes.
+* Si vous voulez lié en permanence à une adresse IP fixe, vous pouvez configurer le fichier Docker `/etc/default/docker` spécifiées
+`DOCKER_OPTS="--ip=IP_ADDRESS"` , pour prendre effet après un service Docker de redémarrage.
