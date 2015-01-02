@@ -1,8 +1,10 @@
-## Docker 镜像
-Docker 镜像就是一个只读的模板。
+## Docker Miroir
+Miroir Docker est un modèle en lecture seule.
 
-例如：一个镜像可以包含一个完整的 ubuntu 操作系统环境，里面仅安装了 Apache 或用户需要的其它应用程序。
+Par exemple: une image peut contenir un environnement de système d'exploitation Ubuntu complète,
+qui vient d'être installé Apache ou d'autres applications que les utilisateurs ont besoin.
 
-镜像可以用来创建 Docker 容器。
+Miroir peut être utilisé pour créer récipient Docker.
 
-Docker 提供了一个很简单的机制来创建镜像或者更新现有的镜像，用户甚至可以直接从其他人那里下载一个已经做好的镜像来直接使用。
+Docker fournit un mécanisme très simple pour créer ou mettre à jour une image en miroir existante,
+les utilisateurs peuvent même télécharger une image prête directement à partir d'autres gens là-bas pour être utilisé directement.
