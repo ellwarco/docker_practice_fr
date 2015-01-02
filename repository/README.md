@@ -1,10 +1,8 @@
-# 仓库
+# Dépôt
 
-仓库（Repository）是集中存放镜像的地方。
+Entrepôt (Repository) est un endroit centralisé pour stocker l'image.
 
-一个容易混淆的概念是注册服务器（Registry）。实际上注册服务器是管理仓库的具体服务器，每个服务器上可以有多个仓库，而每个仓库下面有多个镜像。从这方面来说，仓库可以被认为是一个具体的项目或目录。例如对于仓库地址 `dl.dockerpool.com/ubuntu` 来说，`dl.dockerpool.com` 是注册服务器地址，`ubuntu` 是仓库名。
-
-大部分时候，并不需要严格区分这两者的概念。
-
-
-
+Le concept est un serveur d'enregistrement confusion (d'enregistrement). serveur d'enregistrement est en fait le serveur de gestion d'entrepôt en béton, 
+vous pouvez avoir plusieurs entrepôts sur chaque serveur, et chaque entrepôt sous de multiples miroirs.
+À cet égard, l'entrepôt peut être considéré comme un projet ou d'un répertoire spécifique.
+Par exemple, l'adresse de l'entrepôt `dl.dockerpool.com/ubuntu` il, `dl.dockerpool.com` adresse du serveur enregistré, `ubuntu` est le nom du référentiel.
