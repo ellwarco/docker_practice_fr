@@ -1,21 +1,22 @@
-## 自定义网桥
-除了默认的 `docker0` 网桥，用户也可以指定网桥来连接各个容器。
+## pont personnalisé
 
-在启动 Docker 服务的时候，使用 `-b BRIDGE`或`--bridge=BRIDGE` 来指定使用的网桥。
+En plus de la valeur par défaut `docker0` pont, l'utilisateur peut également spécifier un pont pour relier les différents conteneurs.
 
-如果服务已经运行，那需要先停止服务，并删除旧的网桥。
+Docker démarrer le service, utilisez `-b BRIDGE` ou `--bridge=BRIDGE` pour spécifier l'utilisation du pont.
+
+Si le service est déjà en cours d'exécution, alors vous devez arrêter le service, et enlever le vieux pont.
 ```
 $ sudo service docker stop
 $ sudo ip link set dev docker0 down
 $ sudo brctl delbr docker0
 ```
-然后创建一个网桥 `bridge0`。
+Ensuite, créez un pont `bridge0`。
 ```
 $ sudo brctl addbr bridge0
 $ sudo ip addr add 192.168.5.1/24 dev bridge0
 $ sudo ip link set dev bridge0 up
 ```
-查看确认网桥创建并启动。
+Voir que les ponts créés et ouvertes.
 ```
 $ ip addr show bridge0
 4: bridge0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state UP group default
@@ -23,12 +24,13 @@ $ ip addr show bridge0
     inet 192.168.5.1/24 scope global bridge0
        valid_lft forever preferred_lft forever
 ```
-配置 Docker 服务，默认桥接到创建的网桥上。
+Configuration de service Docker, la valeur par défaut sur le pont pour créer un pont.
 ```
 $ echo 'DOCKER_OPTS="-b=bridge0"' >> /etc/default/docker
 $ sudo service docker start
 ```
-启动 Docker 服务。
-新建一个容器，可以看到它已经桥接到了 `bridge0` 上。
+Démarrez le service Docker.
+Créez un conteneur, vous pouvez voir qu'il a été comblé à un `bridge0` sur.
 
-可以继续用 `brctl show` 命令查看桥接的信息。另外，在容器中可以使用 `ip addr` 和 `ip route` 命令来查看 IP 地址配置和路由信息。
+Vous pouvez continuer à utiliser `brctl show` commande pour afficher des informations sur le pont.
+En outre, le conteneur peut être utilisé `ip addr` et `ip route` pour voir la configuration d'adresse IP et les informations de routage des commandes.
