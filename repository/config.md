@@ -1,30 +1,33 @@
-## 仓库配置文件
-Docker 的 Registry 利用配置文件提供了一些仓库的模板（flavor），用户可以直接使用它们来进行开发或生产部署。
+## profil d'entrepôt
 
-### 模板
-在 `config_sample.yml` 文件中，可以看到一些现成的模板段：
-* `common`：基础配置
-* `local`：存储数据到本地文件系统
-* `s3`：存储数据到 AWS S3 中
-* `dev`：使用 `local` 模板的基本配置
-* `test`：单元测试使用
-* `prod`：生产环境配置（基本上跟s3配置类似）
-* `gcs`：存储数据到 Google 的云存储
-* `swift`：存储数据到 OpenStack Swift 服务
-* `glance`：存储数据到 OpenStack Glance 服务，本地文件系统为后备
-* `glance-swift`：存储数据到 OpenStack Glance 服务，Swift 为后备
-* `elliptics`：存储数据到 Elliptics key/value 存储
+Registre de Docker en utilisant le fichier de configuration fournit un certain modèle d'entrepôt (arôme),
+l'utilisateur peut les utiliser directement pour le développement ou le déploiement de production.
 
-用户也可以添加自定义的模版段。
+### Modèle
 
-默认情况下使用的模板是 `dev`，要使用某个模板作为默认值，可以添加 `SETTINGS_FLAVOR` 到环境变量中，例如
+Dans `config_sample.yml` fichier, vous pouvez voir une partie de la section des modèles prêts à l'emploi:
+
+* `common` : Configuration de base
+* `local` : les données stockées dans le système de fichiers local
+* `s3` stockent des données dans l'AWS S3:
+* `dev` : utilisation local configuration de base de modèle
+* `test` : test Unité utilisant
+* `prod` configuration de l'environnement de production (essentiellement de configuration similaire avec s3):
+* `gcs` : stocker des données vers le cloud de stockage de Google
+* `swift` : données sur les services de stockage à OpenStack Swift
+* `glance` : stocker des données aux services Glance OpenStack, sauvegarde du système de fichiers local
+* `glance-swift` : Services de stockage de données à bref OpenStack, Swift pour la sauvegarde
+* `elliptics` : stocker des données à la clé Elliptics / mémoire de valeur
+
+Les utilisateurs peuvent également ajouter la section des modèles personnalisés.
+
+Par modèle par défaut en utilisant `dev`, vous voulez utiliser un modèle par défaut, vous pouvez ajouter `SETTINGS_FLAVOR` à des variables environnementales, telles que
 ```
 export SETTINGS_FLAVOR=dev
 ```
+En outre, le support de fichier de configuration pour les valeurs de chargement de la syntaxe variable d'environnement est `_env:VARIABLENAME[:DEFAULT]`.
 
-另外，配置文件中支持从环境变量中加载值，语法格式为 `_env:VARIABLENAME[:DEFAULT]`。
-
-### 示例配置
+### Exemple de configuration
 ```
 common:
     loglevel: info
@@ -54,4 +57,4 @@ test:
     storage_path: /tmp/tmpdockertmp
 ```
 
-### 选项
+### Options
