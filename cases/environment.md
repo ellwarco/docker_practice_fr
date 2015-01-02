@@ -1,14 +1,22 @@
-## 标准化开发测试和生产环境
-对于大部分企业来说，搭建 PaaS 既没有那个精力，也没那个必要，用 Docker 做个人的 sandbox 用处又小了点。
+## Environnements de tests normalisés de développement et de production
 
-可以用 Docker 来标准化开发、测试、生产环境。
+Pour la plupart des entreprises, la construction PaaS ni l'énergie ni le bac à sable personnels nécessaires à voir avec Docker également utiliser un petit point.
 
+Vous pouvez utiliser le Docker de standardiser les environnements de développement, de test et de production.
 
-![企业应用结构](../_images/enterprise_usage.png)
+![architecture d'applications d'entreprise](../_images/enterprise_usage.png)
 
+Docker faible encombrement, le déploiement de 100 conteneurs sur un seul serveur E5 128 G sont plus assez de mémoire,
+vous pouvez dessiner un seul conteneur ou directement sur le déploiement de la samba accueillir hôte physique,
+utilisez le programme samba maison de parts sera le répertoire personnel de chaque utilisateur mappé sur le centre de développement
+et les services de test des machines Windows.
 
-Docker 占用资源小，在一台 E5 128 G 内存的服务器上部署 100 个容器都绰绰有余，可以单独抽一个容器或者直接在宿主物理主机上部署 samba，利用 samba 的 home 分享方案将每个用户的 home 目录映射到开发中心和测试部门的 Windows 机器上。
+Pour un groupe de projet, par l'architecte pour construire un bon environnement pour une équipe de projet de conteneur standard et les services de test,
+chacun avec ses propres ingénieurs de développer un récipient séparé, par docker `run -v` le répertoire personnel de l'utilisateur est mis en correspondance
+avec le récipient. Lorsque nécessaire de soumettre test, tout simplement remis au code pour le département de test, puis attribuer un conteneur en utilisant
+l' `-v` le répertoire d'accueil de la charge du département d'essai peut être activé. Ainsi, le développement en interne,
+de tester l'unité de base, et ne apparaîtront pas départements de développement de code de soumettre le département de test ne peut pas émettre le déploiement.
 
-针对某个项目组，由架构师搭建好一个标准的容器环境供项目组和测试部门使用，每个开发工程师可以拥有自己单独的容器，通过 `docker run -v` 将用户的 home 目录映射到容器中。需要提交测试时，只需要将代码移交给测试部门，然后分配一个容器使用 `-v` 加载测试部门的 home 目录启动即可。这样，在公司内部的开发、测试基本就统一了，不会出现开发部门提交的代码，测试部门部署不了的问题。
-
-测试部门发布测试通过的报告后，架构师再一次检测容器环境，就可以直接交由部署工程师将代码和容器分别部署到生产环境中了。这种方式的部署横向性能的扩展性也极好。
+Après avoir testé rapport du ministère publié par le test, l'architecte de l'environnement de conteneur nouveau détection, il peut être déployé directement
+par le code des ingénieurs et les contenants sont déployés à un environnement de production.
+Lateral évolutivité des performances de déploiement de cette approche est également excellente.
