@@ -1,5 +1,6 @@
-## 移除本地镜像
-如果要移除本地的镜像，可以使用 `docker rmi` 命令。注意 `docker rm` 命令是移除容器。
+## Retirer miroir local
+
+Si vous souhaitez supprimer un miroir local, vous pouvez utiliser le `docker rmi` commande. Remarque `docker rm` commande est de retirer le récipient.
 ```
 $ sudo docker rmi training/sinatra
 Untagged: training/sinatra:latest
@@ -8,4 +9,4 @@ Deleted: ed0fffdcdae5eb2c3a55549857a8be7fc8bc4241fb19ad714364cbfd7a56b22f
 Deleted: 5c58979d73ae448df5af1d8142436d81116187a7633082650549c52c3a2418f0
 ```
 
-*注意：在删除镜像之前要先用 `docker rm` 删掉依赖于这个镜像的所有容器。
+* Note: Avant de retirer le premier miroir avec un `docker rm` supprimer tous les conteneurs dépend du miroir.
