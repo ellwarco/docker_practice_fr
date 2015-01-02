@@ -1,2 +1,2 @@
-#实战案例
-介绍一些典型的应用场景和案例。
+#Cas réel
+Décrit certains scénarios typiques d'applications et études de cas.
