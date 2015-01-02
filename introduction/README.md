@@ -1,8 +1,8 @@
-# 简介
-本章将带领你进入 Docker 的世界。
+# Brève introduction
+Ce chapitre vous mènera dans le monde de Docker.
 
-什么是 Docker？
+Quel est Docker?
 
-用它会带来什么样的好处？
+Que va apporter avec elle les avantages?
 
-好吧，让我们带着问题开始这神奇之旅。
+D'accord, nous allons commencer avec un problème qui voyage magique.
