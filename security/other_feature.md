@@ -1,9 +1,14 @@
-## 其它安全特性
-除了能力机制之外，还可以利用一些现有的安全机制来增强使用 Docker 的安全性，例如 TOMOYO, AppArmor, SELinux, GRSEC 等。
+## Autres caractéristiques de sécurité
 
-Docker 当前默认只启用了能力机制。用户可以采用多种方案来加强 Docker 主机的安全，例如：
-* 在内核中启用 GRSEC 和 PAX，这将增加很多编译和运行时的安全检查；通过地址随机化避免恶意探测等。并且，启用该特性不需要 Docker 进行任何配置。
-* 使用一些有增强安全特性的容器模板，比如带 AppArmor 的模板和 Redhat 带 SELinux 策略的模板。这些模板提供了额外的安全特性。
-* 用户可以自定义访问控制机制来定制安全策略。
+En plus de la capacité du mécanisme, vous pouvez également utiliser certains des mécanismes de sécurité existants afin d'améliorer
+l'utilisation de la sécurité de Docker, comme TOMOYO, AppArmor, SELinux, grsec ainsi de suite.
 
-跟其它添加到 Docker 容器的第三方工具一样（比如网络拓扑和文件系统共享），有很多类似的机制，在不改变 Docker 内核情况下就可以加固现有的容器。
+Docker mécanisme de capacité actuelle est activée par défaut seulement. Les utilisateurs peuvent utiliser une variété de programmes pour améliorer
+la sécurité Docker hôte, par exemple:
+* Grsec activé dans le noyau et PAX, ce qui augmentera le nombre de contrôles de sécurité pour compiler et exécuter à temps;
+par adresse randomisation pour éviter la détection et les autres malveillants. Et, pour activer cette fonctionnalité ne nécessite aucune configuration Docker.
+* Caractéristiques de sécurité améliorées en utilisant certains modèles de conteneurs, tels que les modèles et le modèle avec Redhat
+avec la politique SELinux AppArmor. Ces modèles offrent des fonctionnalités de sécurité supplémentaires.
+* Les utilisateurs peuvent personnaliser le mécanisme de contrôle d'accès afin de personnaliser les politiques de sécurité.
+
+Ajouter à Docker avec d'autres outils tiers comme contenant (tels que la topologie du réseau et du système de fichiers partagé), il ya beaucoup de mécanisme similaire sans changer la situation Docker de base peut renforcer conteneurs existants.
