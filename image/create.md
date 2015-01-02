@@ -1,28 +1,30 @@
-##创建镜像
+## Créer un miroir
 
-创建镜像有很多方法，用户可以从 Docker Hub 获取已有镜像并更新，也可以利用本地文件系统创建一个。
+Il ya plusieurs façons de créer un miroir, vous pouvez y accéder depuis Docker miroir Hub et mises à jour peut également être utilisé pour créer un système de fichiers local.
 
-### 修改已有镜像
-先使用下载的镜像启动容器。
+### Modifier une image existante
+Première commencer à utiliser le conteneur d'image téléchargé.
 ```
 $ sudo docker run -t -i training/sinatra /bin/bash
 root@0b2616b0e5a8:/#
 ```
-注意：记住容器的 ID，稍后还会用到。
+Note: Rappelez-vous que l'ID de conteneurs, sera utilisé plus tard.
 
-在容器中添加 json 和 gem 两个应用。
+Ajouter JSON et de pierres précieuses deux applications dans le récipient.
 ```
 root@0b2616b0e5a8:/# gem install json
 ```
-当结束后，我们使用 exit 来退出，现在我们的容器已经被我们改变了，使用 `docker commit` 命令来提交更新后的副本。
+Lorsque vous avez terminé, nous utilisons la sortie pour quitter, et maintenant nous avons notre conteneur a été changé,
+utilisez `docker commit` commande pour soumettre une copie de la mise à jour.
 ```
 $ sudo docker commit -m "Added json gem" -a "Docker Newbee" 0b2616b0e5a8 ouruser/sinatra:v2
 4f177bd27a9ff0f6dc2a830403925b5360bfe0b93d476f7fc3231110e7f71b1c
 ```
-其中，`-m` 来指定提交的说明信息，跟我们使用的版本控制工具一样；`-a` 可以指定更新的用户信息；之后是用来创建镜像的容器的 ID；最后指定目标镜像的仓库名和 tag 信息。创建成功后会返回这个镜像的 ID 信息。
+Qui, `-m` pour spécifier des informations descriptives qui nous est soumis, comme l'utilisation d'outils de contrôle de version;
+`-a` peut spécifier les mises à jour de l'information de l'utilisateur, puis utilisées pour créer un miroir de l'ID du conteneur;
+la dernière spécifiée image cible nom de l'entrepôt et des informations d'étiquette. Sera de retour les informations d'identification en miroir après créé avec succès.
 
-
-使用 `docker images` 来查看新创建的镜像。
+Utilisez `docker images` pour afficher l'image nouvellement créé.
 ```
 $ sudo docker images
 REPOSITORY          TAG     IMAGE ID       CREATED       VIRTUAL SIZE
@@ -30,16 +32,19 @@ training/sinatra    latest  5bc342fa0b91   10 hours ago  446.7 MB
 ouruser/sinatra     v2      3c59e02ddd1a   10 hours ago  446.7 MB
 ouruser/sinatra     latest  5db5f8471261   10 hours ago  446.7 MB
 ```
-之后，可以使用新的镜像来启动容器
+Après cela, vous pouvez utiliser le nouveau miroir pour commencer récipient
 ```
 $ sudo docker run -t -i ouruser/sinatra:v2 /bin/bash
 root@78e82f680994:/#
 ```
 
-###利用 Dockerfile 来创建镜像
-使用 `docker commit` 来扩展一个镜像比较简单，但是不方便在一个团队中分享。我们可以使用 `docker build` 来创建一个新的镜像。为此，首先需要创建一个 Dockerfile，包含一些如何创建镜像的指令。
+##Dockerfile utiliser pour créer un miroir
 
-新建一个目录和一个 Dockerfile
+Utilisez `docker commit` à étendre un miroir est relativement simple, mais difficile à part dans une équipe.
+Nous pouvons utiliser `docker build` pour créer une nouvelle image.
+Pour ce faire, vous devez d'abord créer un Dockerfile, contient des instructions sur la façon de créer un miroir.
+
+Créez un répertoire et un Dockerfile
 ```
 $ mkdir sinatra
 $ cd sinatra
@@ -54,14 +59,14 @@ RUN apt-get -qq update
 RUN apt-get -qqy install ruby ruby-dev
 RUN gem install sinatra
 ```
-Dockerfile 基本的语法是
-* 使用`#`来注释
-* `FROM` 指令告诉 Docker 使用哪个镜像作为基础
-* 接着是维护者的信息
-* `RUN`开头的指令会在创建中运行，比如安装一个软件包，在这里使用 apt-get 来安装了一些软件
+Syntaxe de base est Dockerfile
 
-编写完成 Dockerfile 后可以使用 `docker build` 来生成镜像。
+* Utilisez `#` pour commenter
+* `FROM` instruction Docker Quelle image raconte comme base pour
+* Suivi par les défenseurs de l'information
+* `RUN` commande sera exécutée au début de la création, tels que l'installation d'un paquet, où l'utilisation d'apt-get pour installer certains logiciels
 
+Vous pouvez utiliser après leur achèvement Dockerfile docker build pour générer des images.
 ```
 $ sudo docker build -t="ouruser/sinatra:v2" .
 Uploading context  2.56 kB
@@ -96,15 +101,20 @@ Successfully installed sinatra-1.4.5
 Removing intermediate container 5e9d0065c1f7
 Successfully built 324104cde6ad
 ```
-其中 `-t` 标记来添加 tag，指定新的镜像的用户信息。
-“.” 是 Dockerfile 所在的路径（当前目录），也可以替换为一个具体的 Dockerfile 的路径。
+Où -t drapeau pour ajouter un tag, spécifiez les nouvelles informations de l'utilisateur en miroir. 
+`"."` Est le chemin où Dockerfile (le répertoire courant), il peut être remplacé par un chemin en béton de Dockerfile.
 
-可以看到 build 进程在执行操作。它要做的第一件事情就是上传这个 Dockerfile 内容，因为所有的操作都要依据 Dockerfile 来进行。
-然后，Dockfile 中的指令被一条一条的执行。每一步都创建了一个新的容器，在容器中执行指令并提交修改（就跟之前介绍过的 `docker commit` 一样）。当所有的指令都执行完毕之后，返回了最终的镜像 id。所有的中间步骤所产生的容器都被删除和清理了。
+Vous pouvez voir le processus de construction pour effectuer des opérations. Ce est la première chose à faire est de télécharger ce contenu Dockerfile,
+parce que toutes les opérations doivent être effectuées en conformité avec Dockerfile.
+Ensuite, Dockfile les instructions sont exécutées une par une.
+Chaque étape crée un nouveau conteneur, l'exécution et de valider les modifications dans le conteneur (vient d'être présenté devant le `docker commit` le même).
+Lorsque toutes les instructions sont exécutées, le retour de l'image id finale. Conteneur produit toutes les étapes intermédiaires sont retirés et nettoyés.
 
-*注意一个镜像不能超过 127 层
+* A noter qu'un miroir ne peut pas être plus de 127 couches
 
-此外，还可以利用 `ADD` 命令复制本地文件到镜像；用 `EXPOSE` 命令来向外部开放端口；用 `CMD` 命令来描述容器启动后运行的程序等。例如
+En outre, vous pouvez utiliser `ADD` commande pour copier des fichiers locaux vers le miroir;
+utiliser `EXPOSE` commande pour ouvrir les ports à l'extérieur;
+avec `CMD` commande pour décrire le programme commence à courir après le récipient et ainsi de suite. Comme
 ```
 # put my local web site in myApp folder to /var/www
 ADD myApp /var/www
@@ -114,12 +124,12 @@ EXPOSE 80
 CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
 ```
 
-现在可以利用新创建的镜像来启动一个容器。
+Vous pouvez maintenant profiter de l'image nouvellement créé pour démarrer un conteneur.
 ```
 $ sudo docker run -t -i ouruser/sinatra:v2 /bin/bash
 root@8196968dac35:/#
 ```
-还可以用 `docker tag` 命令来修改镜像的标签。
+Vous pouvez également utiliser `docker tag` commande pour modifier l'image de l'étiquette.
 ```
 $ sudo docker tag 5db5f8471261 ouruser/sinatra:devel
 $ sudo docker images ouruser/sinatra
@@ -129,25 +139,28 @@ ouruser/sinatra     devel   5db5f8471261  11 hours ago   446.7 MB
 ouruser/sinatra     v2      5db5f8471261  11 hours ago   446.7 MB
 ```
 
-*注：更多用法，请参考 [Dockerfile](../dockerfile/README.md) 章节。
+* Note: Pour plus d'utilisation, se il vous plaît se référer à la section [Dockerfile](../dockerfile/README.md).
 
-### 从本地文件系统导入
-要从本地文件系统导入一个镜像，可以使用 openvz（容器虚拟化的先锋技术）的模板来创建：
-openvz 的模板下载地址为 http://openvz.org/Download/templates/precreated。
+### Importer à partir de système de fichiers local
 
-比如，先下载了一个 ubuntu-14.04 的镜像，之后使用以下命令导入：
+A partir du système de fichiers local d'importer une image, vous pouvez utiliser OpenVZ (virtualisation technologie pionnière de conteneur)
+pour créer un template: openvz adresse de téléchargement de modèle http://openvz.org/Download/templates/precreated.
+
+Par exemple, pour télécharger un miroir ubuntu-14.04, après l'importation, utilisez la commande suivante:
 ```
 sudo cat ubuntu-14.04-x86_64-minimal.tar.gz  |docker import - ubuntu:14.04
 ```
-然后查看新导入的镜像。
+Puis voir les images nouvellement importées.
 ```
 docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
 ubuntu              14.04               05ac7c0b9383        17 seconds ago      215.5 MB
 ```
 
-###上传镜像
-用户可以通过 `docker push` 命令，把自己创建的镜像上传到仓库中来共享。例如，用户在 Docker Hub 上完成注册后，可以推送自己的镜像到仓库中。
+## Télécharger l'image
+
+Les utilisateurs peuvent `docker push` commande pour créer leur propre image téléchargée vers le référentiel à partager.
+Par exemple, après que l'utilisateur termine l'enregistrement sur Docker Hub, vous pouvez pousser votre propre image dans l'entrepôt.
 ```
 $ sudo docker push ouruser/sinatra
 The push refers to a repository [ouruser/sinatra] (len: 1)
