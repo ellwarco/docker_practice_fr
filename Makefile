@@ -54,6 +54,7 @@ clean:
 gitbook:
 	fig up -d gitbook
 	xdg-open http://localhost:4000
+	xdg-open http://localhost:35729
 
 dev: gitbook
 	xdg-open "http://translate.google.fr/translate?hl=fr&sl=zh-CN&u=http://yeasy.gitbooks.io/docker_practice/content/"
