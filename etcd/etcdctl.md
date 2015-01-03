@@ -1,11 +1,14 @@
-## 使用 etcdctl
+## Utilisez etcdctl
 
-etcdctl 是一个命令行客户端，它能提供一些简洁的命令，供用户直接跟 etcd 服务打交道，而无需基于 HTTP API 方式。这在某些情况下将很方便，例如用户对服务进行测试或者手动修改数据库内容。我们也推荐在刚接触 etcd 时通过 etcdctl 命令来熟悉相关的操作，这些操作跟 HTTP API 实际上是对应的。
+etcdctl est un client de ligne de commande, il peut fournir des commandes simples pour l'utilisateur d'interagir directement avec les services ETCD
+sans approche basée sur les API HTTP. Il sera commode dans certains cas, tel qu'un mode d'emploi pour l'essai de services ou
+de modifier le contenu d'une base de données. Nous vous recommandons également lorsque vous êtes nouveau aux opérations ETCD familiers liés par commande etcdctl,
+ces opérations avec l'API HTTP est en fait correspondent.
 
-etcd 项目二进制发行包中已经包含了 etcdctl 工具，没有的话，可以从 (github.com/coreos/etcd/releases)[https://github.com/coreos/etcd/releases] 下载。
+binaires du projet ETCD inclus déjà outil etcdctl, non, de [github.com/coreos/etcd/releases](https://github.com/coreos/etcd/releases) téléchargement.
 
-etcdctl 支持如下的命令，大体上分为数据库操作和非数据库操作两类，后面将分别进行解释。
-
+etcdctl soutient la commande suivante, généralement divisés dans les opérations de base de données et non base de données fonctionne deux types,
+ce dernier sera expliquée séparément.
 ```
 $ etcdctl -h
 NAME:
@@ -46,49 +49,50 @@ GLOBAL OPTIONS:
    --version, -v		print the version
 ```
 
-### 数据库操作
-数据库操作围绕对键值和目录的 CRUD （符合 REST 风格的一套操作：Create）完整生命周期的管理。
+### opérations de base de données
 
-etcd 在键的组织上采用了层次化的空间结构（类似于文件系统中目录的概念），用户指定的键可以为单独的名字，如 `testkey`，此时实际上放在根目录 `/` 下面，也可以为指定目录结构，如 `cluster1/node2/testkey`，则将创建相应的目录结构。
+Base de données des opérations CRUD autour des clés et répertoires: Gestion (en ligne avec un ensemble de fonctionnement de type REST Créer) le cycle de vie complet.
 
-*注：CRUD 即 Create, Read, Update, Delete，是符合 REST 风格的一套 API 操作。*
+touches ETCD dans l'organisation avec une structure spatiale hiérarchique (similaire au concept d'un répertoire de système de fichiers),
+l'utilisateur peut spécifier un nom clés séparés tels que `testkey`, cette fois effectivement placé dans le répertoire racine `/` ci-dessous,
+ou vous pouvez Pour spécifier la structure de répertoire, comme `cluster1/node2/testkey`, puis créer la structure de répertoire approprié.
+
+*Remarque: CRUD qui créent, Read, Update, Delete, est un ensemble d'opérations en ligne avec l'API de type REST.*
 
 #### set
-指定某个键的值。例如
+Spécifiez la valeur d'une obligation. Comme
 ```
 $ etcdctl set /testdir/testkey "Hello world"
 Hello world
 ```
-支持的选项包括：
+Options prises en charge comprennent:
 ```
---ttl '0'			该键值的超时时间（单位为秒），不配置（默认为 0）则永不超时
---swap-with-value value 若该键现在的值是 value，则进行设置操作
---swap-with-index '0'	若该键现在的索引值是指定索引，则进行设置操作
+--ttl '0'			Le délai clé (en secondes) ne est pas configuré (par défaut est 0) ne est jamais le temps
+--swap-with-value Si la valeur actuelle est la valeur de clé value, l'opération réglée
+--swap-with-index '0' Si les valeurs de l'indice clés sont maintenant complétée Indice, passez à mettre en place
 ```
 
 #### get
-获取指定键的值。例如
+Obtient la valeur de la clé spécifiée. Comme
 ```
 $ etcdctl set testkey hello
 hello
 $ etcdctl update testkey world
 world
 ```
-
-当键不存在时，则会报错。例如
+Lorsque la clé ne existe pas, ce est une erreur. Comme
 ```
 $ etcdctl get testkey2
 Error:  100: Key not found (/testkey2) [1]
 ```
-
-支持的选项为
+Les options supportées par
 ```
---sort	对结果进行排序
---consistent 将请求发给主节点，保证获取内容的一致性
+--sort Trier les résultats
+--consistent La demande au noeud maître, pour assurer la cohérence de l'accès au contenu
 ```
 
 #### update
-当键存在时，更新值内容。例如
+Lorsque la clé existe, la valeur mise à jour du contenu. Comme
 ```
 $ etcdctl set testkey hello
 hello
@@ -96,46 +100,46 @@ $ etcdctl update testkey world
 world
 ```
 
-当键不存在时，则会报错。例如
+Lorsque la clé ne existe pas, ce est une erreur. Comme
 ```
 $ etcdctl update testkey2 world
 Error:  100: Key not found (/testkey2) [1]
 ```
 
-支持的选项为
+Les options supportées par
 ```
---ttl '0'	超时时间（单位为秒），不配置（默认为 0）则永不超时
+--ttl '0' Délai (en secondes) ne est pas configuré (par défaut est 0) ne est jamais le temps
 ```
 
 #### rm
-删除某个键值。例如
+Suppression d'une clé. Comme
 ```
 $ etcdctl rm testkey
 
 ```
 
-当键不存在时，则会报错。例如
+Lorsque la clé ne existe pas, ce est une erreur. Comme
 ```
 $ etcdctl rm testkey2
 Error:  100: Key not found (/testkey2) [8]
 ```
 
-支持的选项为
+Les options supportées par
 ```
---dir		如果键是个空目录或者键值对则删除
---recursive		删除目录和所有子键
---with-value 	检查现有的值是否匹配
---with-index '0'	检查现有的 index 是否匹配
+--dir	Si la clé est un répertoire vide ou supprimer paires clé-valeur
+--recursive		Supprimer un répertoire et tous les sous-clés
+--with-value 	Vérifiez les matchs de la valeur actuelle
+--with-index '0'	Vérifiez les matchs d'index existants
 
 ```
 
 #### mk
-如果给定的键不存在，则创建一个新的键值。例如
+Si la clé donnée ne existe pas, créez une nouvelle clé. Comme
 ```
 $ etcdctl mk /testdir/testkey "Hello world"
 Hello world
 ```
-当键存在的时候，执行该命令会报错，例如
+Lorsque la clé existe, l'exécution de l'ordre est donné, par exemple,
 ```
 $ etcdctl set testkey "Hello world"
 Hello world
@@ -143,48 +147,45 @@ $ ./etcdctl mk testkey "Hello world"
 Error:  105: Key already exists (/testkey) [2]
 ```
 
-支持的选项为
+Les options supportées par
 ```
---ttl '0'	超时时间（单位为秒），不配置（默认为 0）则永不超时
+--ttl '0'	Délai (en secondes) ne est pas configuré (par défaut est 0) ne est jamais le temps
 ```
-
 
 #### mkdir
-如果给定的键目录不存在，则创建一个新的键目录。例如
+Si le répertoire clé donnée ne existe pas, créez un nouveau répertoire clé. Comme
 ```
 $ etcdctl mkdir testdir
 ```
-当键目录存在的时候，执行该命令会报错，例如
+Lorsque le répertoire clé existe, exécutez la commande va se plaindre, par exemple,
 ```
 $ etcdctl mkdir testdir
 $ etcdctl mkdir testdir
 Error:  105: Key already exists (/testdir) [7]
 ```
-支持的选项为
+Les options supportées par
 ```
---ttl '0'	超时时间（单位为秒），不配置（默认为 0）则永不超时
+--ttl '0'	Délai (en secondes) ne est pas configuré (par défaut est 0) ne est jamais le temps
 ```
 
 #### setdir
+Créer un répertoire de clés, indépendamment de la présence ou de l'absence.
 
-创建一个键目录，无论存在与否。
-
-支持的选项为
+Les options supportées par
 ```
---ttl '0'	超时时间（单位为秒），不配置（默认为 0）则永不超时
+--ttl '0'	Délai (en secondes) ne est pas configuré (par défaut est 0) ne est jamais le temps
 ```
 
 #### updatedir
-更新一个已经存在的目录。
-支持的选项为
+Mettre à jour un répertoire existant. Les options supportées par
 ```
---ttl '0'	超时时间（单位为秒），不配置（默认为 0）则永不超时
+--ttl '0' Délai (en secondes) ne est pas configuré (par défaut est 0) ne est jamais le temps
 ```
 
 #### rmdir
-删除一个空目录，或者键值对。
+Supprimer un répertoire vide, ou la paire de clés.
 
-若目录不空，会报错
+Si le répertoire ne est pas vide, il sera l'erreur
 ```
 $ etcdctl set /dir/testkey hi
 hi
@@ -193,9 +194,9 @@ Error:  108: Directory not empty (/dir) [13]
 ```
 
 #### ls
-列出目录（默认为根目录）下的键或者子目录，默认不显示子目录中内容。
+Touche ou sous-répertoires listés dans le répertoire (par défaut est le répertoire racine), la valeur par défaut ne affiche pas le contenu des sous-répertoires.
 
-例如
+Comme
 ```
 $ ./etcdctl set testkey 'hi'
 hi
@@ -208,42 +209,43 @@ $ ./etcdctl ls dir
 /dir/test
 ```
 
-支持的选项包括
+Les options supportées comprennent
 ```
---sort	将输出结果排序
---recursive	如果目录下有子目录，则递归输出其中的内容
--p		对于输出为目录，在最后添加 `/` 进行区分
+--sort La sortie de la sorte
+--recursive Se il ya un sous-répertoire sous le contenu du répertoire de façon récursive sortie
+-p	Pour le répertoire de sortie, le dernier ajouté `/` de distinguer
 ```
 
-### 非数据库操作
+### Les opérations non-base de données
 
-#### backup
-备份 etcd 的数据。
+#### sauvegarde
 
-支持的选项包括
+Données de sauvegarde ETCD.
+
+Les options supportées comprennent
 ```
---data-dir 		etcd 的数据目录
---backup-dir 	备份到指定路径
+--data-dir 		etcd Le répertoire des données
+--backup-dir 	Retour à la chemin spécifié
 ```
 #### watch
-监测一个键值的变化，一旦键值发生更新，就会输出最新的值并退出。
+Le suivi d'un changement de clé, clé de mise à jour arrive une fois, il va afficher la dernière valeur et la sortie.
 
-例如，用户更新 testkey 键值为 Hello world。
+Par exemple, un utilisateur met à jour TestKey clé Hello World.
 ```
 $ etcdctl watch testkey
 Hello world
 ```
 
-支持的选项包括
+Les options supportées comprennent
 ```
---forever		一直监测，直到用户按 `CTRL+C` 退出
---after-index '0'	在指定 index 之前一直监测
---recursive		返回所有的键值和子键值
+--forever		Surveillés en permanence jusqu'à l'utilisateur appuie sur `CTRL+C` exit
+--after-index '0'	Été contrôlé avant l'index spécifié
+--recursive	Retournez toutes les clés et sous-clés
 ```
 #### exec-watch
-监测一个键值的变化，一旦键值发生更新，就执行给定命令。
+Le suivi d'un changement de clé, une fois la mise à jour se produit clé, exécutez la commande donnée.
 
-例如，用户更新 testkey 键值。
+Par exemple, les mises à jour utilisateur clé TestKey.
 ```
 $etcdctl exec-watch testkey -- sh -c 'ls'
 default.etcd
@@ -255,28 +257,29 @@ README-etcdctl.md
 README.md
 ```
 
-支持的选项包括
+Les options supportées comprennent
 ```
---after-index '0'	在指定 index 之前一直监测
---recursive		返回所有的键值和子键值
+--after-index '0'	Été contrôlé avant l'index spécifié
+--recursive	Retournez toutes les clés et sous-clés
 ```
 
 #### member
-通过 list、add、remove 命令列出、添加、删除 etcd 实例到 etcd 集群中。
+Grâce aux commandes list, add, remove pour  lister, ajouter, supprimer instance ETCD à ETCD cluster.
 
-例如本地启动一个 etcd 服务实例后，可以用如下命令进行查看。
+Démarrer une ETCD comme instance de service local, vous pouvez utiliser la commande suivante pour la visualiser.
+
 ```
 $ etcdctl member list
 ce2a822cea30bfca: name=default peerURLs=http://localhost:2380,http://localhost:7001 clientURLs=http://localhost:2379,http://localhost:4001
 
 ```
-### 命令选项
-* `--debug`			输出 cURL 命令，显示执行命令的时候发起的请求
-* `--no-sync`			发出请求之前不同步集群信息
-* `--output, -o 'simple'`	输出内容的格式 (`simple` 为原始信息，`json` 为进行json格式解码，易读性好一些)
-* `--peers, -C`			指定集群中的同伴信息，用逗号隔开 (默认为: "127.0.0.1:4001")
-* `--cert-file` 			HTTPS 下客户端使用的 SSL 证书文件
-* `--key-file`			HTTPS 下客户端使用的 SSL 密钥文件
-* `--ca-file` 			服务端使用 HTTPS 时，使用 CA 文件进行验证
-* `--help, -h`			显示帮助命令信息
-* `--version, -v`		打印版本信息
+### Options de commande
+* `--debug` cURL de sortie commande pour afficher le temps d'exécuter une demande de commande à l'initiative
+* `--no-sync` synchronisation pôle informations avant de faire la demande
+* `--output, -o 'simple` format de sortie (`simple` est l'information originale, `json` format JSON d'effectuer un décodage, une meilleure lisibilité)
+* `--peers, -C` informations compagnons groupe désigné, séparées par des virgules (par défaut: "127.0.0.1:4001")
+* `--cert-file` sous HTTPS fichier de certificat SSL utilisé par le client
+* `--key-file` sous HTTPS SSL fichiers clés utilisés par le client
+* `--ca-file` serveur en utilisant le protocole HTTPS, en utilisant les fichiers de CA pour vérifier
+* `--help, -h` commande pour afficher des informations d'aide
+* `--version, -v` impression informations de version
