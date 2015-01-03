@@ -1,26 +1,28 @@
 ## [MongoDB](https://registry.hub.docker.com/_/mongo/)
 
-### 基本信息
-[MongoDB](https://en.wikipedia.org/wiki/MongoDB) 是开源的 NoSQL 数据库实现。
-该仓库提供了 MongoDB 2.2 ~ 2.7 各个版本的镜像。
+### Données de base
 
-### 使用方法
-默认会在 `27017` 端口启动数据库。
+[MongoDB](https://en.wikipedia.org/wiki/MongoDB) est une implémentation de base de données NoSQL la source ouverte.
+L'entrepôt fournit différentes versions MongoDB l'image 2.2 ~ 2.7 de.
+
+### Utilisation
+
+La valeur par défaut sera `27017` pour démarrer le port de base de données.
 ```
 $ sudo docker run --name some-mongo -d mongo
 ```
 
-使用其他应用连接到容器，可以用
+Utiliser d'autres applications connectées au conteneur, vous pouvez utiliser
 ```
 $ sudo docker run --name some-app --link some-mongo:mongo -d application-that-uses-mongo
 ```
-或者通过 `mongo`
+Ou par `mongo`
 ```
 $ sudo docker run -it --link some-mongo:mongo --rm mongo sh -c 'exec mongo "$MONGO_PORT_27017_TCP_ADDR:$MONGO_PORT_27017_TCP_PORT/test"'
 ```
 
 ### Dockerfile
-* [2.2 版本](https://github.com/docker-library/mongo/blob/77c841472ccb6cc87fea1218269d097405edc6cb/2.2/Dockerfile)
-* [2.4 版本](https://github.com/docker-library/mongo/blob/807078cb7b5f0289f6dabf9f6875d5318122bc30/2.4/Dockerfile)
-* [2.6 版本](https://github.com/docker-library/mongo/blob/77c841472ccb6cc87fea1218269d097405edc6cb/2.6/Dockerfile)
-* [2.7 版本](https://github.com/docker-library/mongo/blob/807078cb7b5f0289f6dabf9f6875d5318122bc30/2.7/Dockerfile)
+* [Version 2.2](https://github.com/docker-library/mongo/blob/77c841472ccb6cc87fea1218269d097405edc6cb/2.2/Dockerfile)
+* [Version 2.4](https://github.com/docker-library/mongo/blob/807078cb7b5f0289f6dabf9f6875d5318122bc30/2.4/Dockerfile)
+* [Version 2.6](https://github.com/docker-library/mongo/blob/77c841472ccb6cc87fea1218269d097405edc6cb/2.6/Dockerfile)
+* [Version 2.7](https://github.com/docker-library/mongo/blob/807078cb7b5f0289f6dabf9f6875d5318122bc30/2.7/Dockerfile)
