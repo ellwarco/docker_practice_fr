@@ -1,168 +1,169 @@
-# Docker命令查询
+# Docker Query
 
-##基本语法
+## La syntaxe de base
     docker [OPTIONS] COMMAND [arg...]
-一般来说，Docker 命令可以用来管理 daemon，或者通过 CLI 命令管理镜像和容器。可以通过 `man docker` 来查看这些命令。
+Généralement, Docker commande peut être utilisé pour gérer le démon, ou une image administrative et conteneur à travers les commandes CLI.
+En man docker pour voir ces commandes.
 
-
-##选项
+##Options
     -D=true|false
-        使用 debug 模式。默认为 false。
+        Utilisez le mode de debug. La valeur par défaut est false.
 
-    -H, --host=[unix:///var/run/docker.sock]: tcp://[host:port]来绑定或者 unix://[/path/to/socket] 来使用。
-        在 daemon 模式下绑定的 socket，通过一个或多个 tcp://host:port, unix:///path/to/socket, fd://* or fd://socketfd 来指定。
+    -H, --host=[unix:///var/run/docker.sock]: tcp://[host:port]Pour lier ou unix://[/path/to/socket] Utilisé.
+        Dans daemon socket mode affectation, par un ou plusieurs tcp://host:port, unix:///path/to/socket, fd://* or fd://socketfd Pour spécifier.
 
     --api-enable-cors=true|false
-        在远端 API 中启用 CORS 头。缺省为 false。
+        Activer la tête CORS à l'API d'extrémité distale. La valeur par défaut est false.
 
     -b=""
-        将容器挂载到一个已存在的网桥上。指定为 'none' 时则禁用容器的网络。
+        Le navire a été monté sur un pont existant. Le réseau de conteneurs désactivation spécifié comme 'none' quand.
 
     --bip=""
-        让动态创建的 docker0 采用给定的 CIDR 地址; 与 -b 选项互斥。
+       Laissez docker0 créé dynamiquement en utilisant l'adresse CIDR donné, et options -b sont mutuellement exclusifs.
 
     -d=true|false
-        使用 daemon 模式。缺省为 false。
+        Utilisez le mode daemon. La valeur par défaut est false.
 
     --dns=""
-        让 Docker 使用给定的 DNS 服务器。
+       Laissez Docker donnée serveur DNS.
 
     -g=""
-        指定 Docker 运行时的 root 路径。缺省为 /var/lib/docker。
+        Indiquez le chemin root Docker exécution. La valeur par défaut est /var/lib/docker.
 
     --icc=true|false
-        启用容器间通信。默认为 true。
+       Activation de la communication entre les conteneurs. La valeur par défaut est true.
 
     --ip=""
-        绑定端口时候的默认 IP 地址。缺省为 0.0.0.0。
+        Lie l'adresse IP par défaut pour le port quand. La valeur par défaut est 0.0.0.0.
 
     --iptables=true|false
-        禁止 Docker 添加 iptables 规则。缺省为 true。
+        Ajouter iptables règles interdisent Docker. La valeur par défaut est true.
 
     --mtu=VALUE
-        指定容器网络的 mtu。缺省为 1500。
+       Spécifiez réseau contenant MTU. La valeur par défaut est 1500.
 
     -p=""
-        指定 daemon 的 PID 文件路径。缺省为 /var/run/docker.pid。
+      Chemin du fichier PID du daemon spécifié. La valeur par défaut est /var/run/docker.pid.
 
     -s=""
-        强制 Docker 运行时使用给定的存储驱动。
+        L'utilisation d'un disque de stockage donnée forcé Docker exécution.
 
     -v=true|false
-        输出版本信息并退出。缺省值为 false。
+        Sortie version et quitte. La valeur par défaut est false.
 
     --selinux-enabled=true|false
-        启用 SELinux 支持。缺省值为 false。SELinux 目前不支持 BTRFS 存储驱动。
+        Activation du support SELinux. La valeur par défaut est false. Pilotes de stockage SELinux actuellement Btrfs ne sont pas pris en charge.
 
 
-##命令
-Docker 的命令可以采用 `docker-CMD` 或者 `docker CMD` 的方式执行。两者一致。
+## Commandement
+Le commandement de Docker peut être utilisé `docker-CMD` ou `docker CMD` manière. Conformément à la fois.
 
     docker-attach(1)
-        依附到一个正在运行的容器中。
+        Attaché à un conteneur dans la course.
 
     docker-build(1)
-        从一个 Dockerfile 创建一个镜像
+        Créer un miroir d'un Dockerfile
 
     docker-commit(1)
-        从一个容器的修改中创建一个新的镜像
+        Créer une nouvelle image de la modification d'un conteneur
 
     docker-cp(1)
-        从容器中复制文件到宿主系统中
+        Copier les fichiers du récipient dans le système hôte
 
     docker-diff(1)
-        检查一个容器文件系统的修改
+       Modifier une vérification du système de fichier conteneur
 
     docker-events(1)
-        从服务端获取实时的事件
+        Obtenez événements en temps réel à partir du serveur
 
     docker-export(1)
-        导出容器内容为一个 tar 包
+       Exporter le contenu du récipient dans un paquet tar
 
     docker-history(1)
-        显示一个镜像的历史
+        Affiche l'historique d'un miroir
 
     docker-images(1)
-        列出存在的镜像
+       Miroirs listés
 
     docker-import(1)
-        导入一个文件（典型为 tar 包）路径或目录来创建一个镜像
+       Importation d'un fichier (paquet généralement tar) chemin ou répertoire pour créer une image miroir
 
     docker-info(1)
-        显示一些相关的系统信息
+        Affiche des informations de système apparenté
 
     docker-inspect(1)
-        显示一个容器的底层具体信息。
+        Afficher les détails sous-jacents d'un conteneur.
 
     docker-kill(1)
-        关闭一个运行中的容器 (包括进程和所有资源)
+        Fermez un récipient en cours d'exécution (y compris les processus et toutes les ressources)
 
     docker-load(1)
-        从一个 tar 包中加载一个镜像
+       Chargez une image à partir d'un paquet de goudron 
 
     docker-login(1)
-        注册或登录到一个 Docker 的仓库服务器
+        Se inscrire ou se connecter à un serveur Docker entrepôt
 
     docker-logout(1)
-        从 Docker 的仓库服务器登出
+        Se déconnecter de Docker serveur d'entrepôt
 
     docker-logs(1)
-        获取容器的 log 信息
+        Obtenir une information de journal de conteneurs
 
     docker-pause(1)
-        暂停一个容器中的所有进程
+        Suspendre tous les processus dans un conteneur
 
     docker-port(1)
-        查找一个 nat 到一个私有网口的公共口
+        Trouver un nat à une ouverture au public du port de réseau privé
 
     docker-ps(1)
-        列出容器
+        Inscrite récipient
 
     docker-pull(1)
-        从一个Docker的仓库服务器下拉一个镜像或仓库
+        Docker serveur d'entrepôt à partir d'un menu déroulant d'un miroir ou d'un entrepôt
 
     docker-push(1)
-        将一个镜像或者仓库推送到一个 Docker 的注册服务器
+        Un miroir ou un entrepôt poussés serveur d'enregistrement Docker
 
     docker-restart(1)
-        重启一个运行中的容器
+        Redémarrez un récipient en cours d'exécution
 
     docker-rm(1)
-        删除给定的若干个容器
+       Suppression d'un nombre donné de conteneurs
 
     docker-rmi(1)
-        删除给定的若干个镜像
+        Retirer le nombre donné de miroirs
 
     docker-run(1)
-        创建一个新容器，并在其中运行给定命令
+        Créer un nouveau conteneur, et dans lequel exécuter une commande donnée
 
     docker-save(1)
-        保存一个镜像为 tar 包文件
+        Enregistrer une image comme un fichier de package tar
 
     docker-search(1)
-        在 Docker index 中搜索一个镜像
+        Indice Docker dans la recherche d'un miroir
 
     docker-start(1)
-        启动一个容器
+        Lancer un récipient
 
     docker-stop(1)
-        终止一个运行中的容器
+       Terminer un récipient en cours d'exécution
 
     docker-tag(1)
-        为一个镜像打标签
+       Comme un marquage d'image miroir
 
     docker-top(1)
-        查看一个容器中的正在运行的进程信息
+        Process Viewer se exécute dans un conteneur d'informations
 
     docker-unpause(1)
-        将一个容器内所有的进程从暂停状态中恢复
+        Tous les processus au sein d'une récupération des contenants de l'état suspendu
 
     docker-version(1)
-        输出 Docker 的版本信息
+        Informations sur la version de sortie Docker
 
     docker-wait(1)
-        阻塞直到一个容器终止，然后输出它的退出符
+        Blocs jusqu'à la résiliation d'un récipient, puis la sortie de son signe de sortie
+        
 
-##一张图总结 Docker 的命令
+##Une figure ci-dessous récapitule la commande Docker
 
-![命令周期](../_images/cmd_logic.png)
+![Cycle de commande](../_images/cmd_logic.png)
