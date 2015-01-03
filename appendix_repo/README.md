@@ -1,2 +1,3 @@
-# 常见仓库介绍
-本章将介绍常见的一些仓库和镜像的功能，使用方法和生成它们的 Dockerfile 等。包括 Ubuntu、CentOS、MySQL、MongoDB、Redis、Nginx、Wordpress、Node.js 等。
+# Common Warehouse Présentation
+Ce chapitre décrit une partie de l'entrepôt commun et fonctions, l'utilisation en miroir, et de générer leur Dockerfile comme.
+Y compris Ubuntu, CentOS, MySQL, MongoDB, Redis, Nginx, Wordpress, Node.js et ainsi de suite.
