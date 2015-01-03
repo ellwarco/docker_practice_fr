@@ -1,34 +1,38 @@
 ## [Nginx](https://registry.hub.docker.com/_/nginx/)
 
-### 基本信息
-[Nginx](https://en.wikipedia.org/wiki/Nginx) 是开源的高效的 Web 服务器实现，支持 HTTP、HTTPS、SMTP、POP3、IMAP 等协议。
-该仓库提供了 Nginx 1.0 ~ 1.7 各个版本的镜像。
+### Données de base
 
-### 使用方法
-下面的命令将作为一个静态页面服务器启动。
+[Nginx](https://en.wikipedia.org/wiki/Nginx) est un serveur Web source ouverte et mise en œuvre efficace, soutenir HTTP, HTTPS, SMTP, POP3, IMAP et d'autres protocoles.
+L'entrepôt fournit 1,0 ~ 1,7 Nginx chaque version du miroir.
+
+### Utilisation
+
+La commande suivante démarre comme un serveur statique de page.
+
 ```
 $ sudo docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
 ```
-用户也可以不使用这种映射方式，通过利用 Dockerfile 来直接将静态页面内容放到镜像中，内容为
+Les utilisateurs ne peuvent pas utiliser cette cartographie en utilisant Dockerfile statique contenu de la page directement dans le miroir, le contenu de
 ```
 FROM nginx
 COPY static-html-directory /usr/share/nginx/html
 ```
-之后生成新的镜像，并启动一个容器。
+Après la génération de la nouvelle image, et de commencer un récipient.
 ```
 $ sudo docker build -t some-content-nginx .
 $ sudo docker run --name some-nginx -d some-content-nginx
 ```
-开放端口，并映射到本地的 `8080` 端口。
+Les ports ouverts, et cartographiés à la section locale `8080` port.
 ```
 sudo docker run --name some-nginx -d -p 8080:80 some-content-nginx
 ```
 
-Nginx的默认配置文件路径为 `/etc/nginx/nginx.conf`，可以通过映射它来使用本地的配置文件，例如
+Nginx chemin du fichier de configuration par défaut est `/etc/nginx/nginx.conf`,
+vous pouvez mapper à utiliser le fichier de configuration locale, par exemple
 ```
 docker run --name some-nginx -v /some/nginx.conf:/etc/nginx/nginx.conf:ro -d nginx
 ```
-使用配置文件时，为了在容器中正常运行，需要保持 `daemon off;`。
+Lorsque vous utilisez le fichier de configuration, afin de fonctionner correctement dans le conteneur, la nécessité de maintenir `daemon off;`。
 
 ### Dockerfile
-* [1 ~ 1.7 版本](https://github.com/nginxinc/docker-nginx/blob/3713a0157083eb4776e71f5a5aef4b2a5bc03ab1/Dockerfile)
+* [Version 1 ~ 1.7](https://github.com/nginxinc/docker-nginx/blob/3713a0157083eb4776e71f5a5aef4b2a5bc03ab1/Dockerfile)
